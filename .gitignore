@@ -1,0 +1,3 @@
+redocly.yaml
+.*
+!/.gitignore
