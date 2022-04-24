@@ -1272,7 +1272,7 @@ paths:
               properties:
                 speaker_map:
                     type: object
-                    properties:
+                    patternProperties:
                       '^[A-Z]$':
                         type: string
                         description: >
