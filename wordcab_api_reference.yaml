@@ -13,7 +13,7 @@ info:
     you’ll be redirected to your [Dashboard](https://wordcab.com/existing-summaries/). From there, head to your 
     [Account](https://wordcab.com/account/details/) page, and click the API Key tab.
     ## Postman Collection
-    [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/11291760-30233637-f540-49f1-8995-4beb008d2356?action=collection%2Ffork&collection-url=entityId%3D11291760-30233637-f540-49f1-8995-4beb008d2356%26entityType%3Dcollection%26workspaceId%3D38faea26-9850-4351-be7e-0764297a460a)
+    [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/11291760-6f453e35-dee9-490d-84cc-fcd37d04fbb0?action=collection%2Ffork&collection-url=entityId%3D11291760-6f453e35-dee9-490d-84cc-fcd37d04fbb0%26entityType%3Dcollection%26workspaceId%3D38faea26-9850-4351-be7e-0764297a460a)    
     ## Webhook Portal
     Wordcab partners with [Svix](https://svix.com) to provide users with a best-in-class webhook experience. You can 
     find a link to your Webhook Portal on your [Account](https://wordcab.com/account/webhook-portal/) page. 
@@ -446,7 +446,7 @@ paths:
           required: false
           description: >
             A comma-seperated string consisting of existing `tags` (for more on tags, see the 
-            **/summarize/** endpoint.
+            **/summarize** endpoint.
             Wordcab will filter stats to only account for the specified tags.
           schema:
             type: string
@@ -485,20 +485,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvalidToken'
-  /summarize/:
+  /summarize:
     post:
       tags:
         - Summarize
       summary: Start Job
       description: >
         Initiate a summary job with an audio file, text transcript, or JSON object. Note that a trailing slash
-        is required in **/summarize/**.
+        is required in **/summarize**.
       parameters:
         - name: X-Wordcab-Metadata-SomeKey
           in: header
           required: false
           description: >
-            To add metadata to your job, simply add `X-Wordcab-Metadata-SomeKey` headers to your **/summarize/** request, 
+            To add metadata to your job, simply add `X-Wordcab-Metadata-SomeKey` headers to your **/summarize** request, 
             where `SomeKey` is _a key of your choice_. A metadata object with the key-value pairs you initially set 
             will be saved to your job object.
             By convention, Wordcab will extract anything after `X-Wordcab-Metadata-` (in this case, `SomeKey`), 
@@ -517,9 +517,8 @@ paths:
         - name: source
           in: query
           required: true
-          description: >
-            Declare the source of the data that you want to summarize. Note that some sources have different 
-            parameter requirements.
+          description: |
+            Declare the source of the data that you want to summarize. Note that some sources have different parameter requirements.
             * `generic` - Generic-format .txt and JSON transcripts
             * `audio` - For uploaded audio files
             * `wordcab_transcript` - Summarize Wordcab transcripts using a `transcript_id` (required for this source)
@@ -900,7 +899,7 @@ paths:
                     type: object
                     description: >
                       The settings that were initially set during job creation. For detailed descriptions
-                      of each, see the **/summarize/** endpoint.
+                      of each, see the **/summarize** endpoint.
                     properties:
                       pipeline:
                         type: string
@@ -915,7 +914,7 @@ paths:
                     description: >
                       Details about the summary object that was created when the job was initiated, including the 
                       `summary_id`, which you can use to retrieve the generated summary. For more detailed descriptions 
-                      of the other details, please see the **/summarize/** endpoint.
+                      of the other details, please see the **/summarize** endpoint.
                     properties:
                       summary_id:
                         type: string
