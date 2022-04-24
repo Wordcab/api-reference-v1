@@ -43,7 +43,7 @@ components:
       properties:
         job_status:
           type: string
-          description: >
+          description: |
             The `status` of the associated job.
             * `Pending` - The job object has been created and is about to be queued
             * `ItemQueued` - The job has been queued
