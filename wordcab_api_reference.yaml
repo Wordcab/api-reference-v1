@@ -1277,8 +1277,9 @@ paths:
                     label. The new speaker map will propagate the new speaker labels to every summary associated
                     with the transcript object. The speaker labels in each summary will reflect the new speaker map.
                   patternProperties:
-                    ^[A-Z]$:
+                    '^[A-Z]$':
                       type: string
+                      patter: '^[A-Z]$'
             example:
               {
                 "speaker_map": {
