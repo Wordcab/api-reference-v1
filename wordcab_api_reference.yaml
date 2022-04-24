@@ -1276,17 +1276,18 @@ paths:
                     The new speaker map you wish to set. Each letter `A` through `Z` is associated with a speaker
                     label. The new speaker map will propagate the new speaker labels to every summary associated
                     with the transcript object. The speaker labels in each summary will reflect the new speaker map.
+                    ```
+                    {
+                      "speaker_map": {
+                        "A": "Joe",
+                        "B": "Jill"
+                      }
+                    }
+                    ```
                   patternProperties:
                     '^[A-Z]$':
                       type: string
                       pattern: '^[A-Z]$'
-            example:
-              {
-                "speaker_map": {
-                  "A": "Joe",
-                  "B": "Jill"
-                }
-              }
       responses:
         '200':
           description: Successfully modified a transcript object
