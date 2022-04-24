@@ -1,0 +1,21 @@
+apis:
+  wordcab@v1:
+    root: ./wordcab_api_reference.yaml
+    labels:
+      - development
+features.openapi:
+  corsProxyUrl: https://cors.redoc.ly
+  showConsole: true
+  generateCodeSamples:
+    skipOptionalParameters: true
+    languages:
+      - lang: curl
+      - lang: Python
+      - lang: JavaScript
+        label: JS
+      - lang: Node.js
+      - lang: Ruby
+      - lang: PHP
+      - lang: Java
+      - lang: Go
+      - lang: R
