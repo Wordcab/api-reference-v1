@@ -546,7 +546,7 @@ paths:
         - name: summary_type
           in: query
           required: true
-          description: >
+          description: |
             The type of summary you want to generate. 
             * `narrative` - Wordcab's default summary type, which aims to produce a detailed, bullet point style summary
             * `short` - A single-sentence summary that aims to capture the essence of a conversation in the following format: _The speakers discussed X, Y, and Z_.
@@ -761,7 +761,7 @@ paths:
                       properties:
                         job_status:
                           type: string
-                          description: >
+                          description: |
                             The status of your job.
                             * `Pending` - The job object has been created and is about to be queued
                             * `ItemQueued` - The job has been queued
@@ -866,7 +866,7 @@ paths:
                 properties:
                   job_status:
                     type: string
-                    description: >
+                    description: |
                       The status of your job.
                       * `Pending` - The job object has been created and is about to be queued
                       * `ItemQueued` - The job has been queued
@@ -1373,7 +1373,7 @@ paths:
                       properties:
                         job_status:
                           type: string
-                          description: >
+                          description: |
                             The `status` of the associated job.
                             * `Pending` - The job object has been created and is about to be queued
                             * `ItemQueued` - The job has been queued
