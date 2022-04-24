@@ -444,7 +444,7 @@ paths:
           required: false
           description: >
             A comma-seperated string consisting of existing `tags` (for more on tags, see the 
-            [**/summarize/**](http://127.0.0.1:8080/#tag/Jobs/paths/~1summarize~1/post) endpoint.
+            **/summarize/** endpoint.
             Wordcab will filter stats to only account for the specified tags.
           schema:
             type: string
@@ -559,7 +559,7 @@ paths:
           required: false
           description: >
             A comma-seperated string of numbers `1` through `5`. `1` corresponds to the shortest
-            summary length, and `5` to the longest. Only required when `summary_type` is set to `narrative`
+            summary length, and `5` to the longest. Only required when `summary_type` is set to `narrative`.
           schema:
             type: string
             default: "3"
@@ -568,7 +568,7 @@ paths:
           in: query
           required: false
           description: >
-            Required only when `source` is set to `wordcab_transcript`. Represents the id of a processed
+            Required when `source` is set to `wordcab_transcript`. Represents the id of a processed
             Wordcab transcript.
           schema:
             type: string
@@ -1231,6 +1231,82 @@ paths:
                         "end_time":"00:00:14"
                       }
                     ],
+                    "speaker_map": {
+                      "A": "Joe",
+                      "B": "Jill"
+                    }
+                  }
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/TranscriptIdNotFound'
+                  - $ref: '#/components/schemas/TranscriptNotFound'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidToken'
+    patch:
+      tags:
+        - Transcripts
+      summary: Change Speaker Labels
+      description: >
+        Modify a transcript's speaker labels. These changes will propagate to every associated summary object.
+      parameters:
+        - name: transcript_id
+          in: path
+          required: true
+          description: The `transcript_id` of the transcript you'd like to modify.
+          schema:
+            type: string
+          example: transcript_KU3IU70e4az3WiJhWsOQI7WPXTRweo8W
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                speaker_map:
+                    type: object
+                    properties:
+                      '^[A-Z]$':
+                        type: string
+                        description: >
+                          The new speaker map you wish to set. Each letter `A` through `Z` is associated with a speaker
+                          label. The new speaker map will propagate the new speaker labels to every summary associated
+                          with the transcript object. The speaker labels in each summary will reflect the new speaker map.
+            example:
+              {
+                "speaker_map": {
+                  "A": "Joe",
+                  "B": "Jill"
+                }
+              }
+      responses:
+        '200':
+          description: Successfully modified a transcript object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transcript_id:
+                    type: string
+                    description: The id of the transcript object.
+                  speaker_map:
+                    type: object
+                    properties:
+                      A-Z:
+                        type: string
+                        description: >
+                          The new speaker map that was set.
+                example:
+                  {
+                    "transcript_id": "transcript_KU3IU70e4az3WiJhWsOQI7WPXTRweo8W",
                     "speaker_map": {
                       "A": "Joe",
                       "B": "Jill"
