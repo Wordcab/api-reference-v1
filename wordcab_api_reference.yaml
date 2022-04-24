@@ -2,7 +2,7 @@ openapi: 3.1.0
 info:
   version: 1.0.0
   title: Wordcab API
-  description: |
+  description: >
     # Overview
     Summarize business communications at scale with Wordcab's API. To access the reference for our legacy API,
     [please head here](https://wordcab.com/api-reference/).
@@ -43,7 +43,7 @@ components:
       properties:
         job_status:
           type: string
-          description: |
+          description: >
             The `status` of the associated job.
             * `Pending` - The job object has been created and is about to be queued
             * `ItemQueued` - The job has been queued
@@ -74,7 +74,7 @@ components:
           properties:
             A-Z:
               type: string
-              description: |
+              description: >
                 The key can be any letter `A` through `Z`. The value is the assigned speaker label, which defaults to 
                 **SPEAKER [A-Z]** (for example, 'SPEAKER B').
         source:
@@ -88,13 +88,13 @@ components:
           properties:
             summary:
               type: object
-              description: |
+              description: >
                 A narrative-style summary split into individual 'bullets', with each bullet having a corresponding 
                 transcript object.
               properties:
                 1-5:
                   type: object
-                  description: |
+                  description: >
                     The key is a number from `1` through `5`, represented as a **string** (for example, '3').
                     Each number represents the level of detail of the corresponding summary. `1` Would be the 
                     shortest summary, and `5` the longest. Each Narrative Summary has one or more summary objects,
@@ -108,42 +108,42 @@ components:
                         properties:
                           summary:
                             type: string
-                            description: |
+                            description: >
                               A summary 'bullet', part of one or more bullets composing the Narrative Summary for a 
                               particular summary length.
                           start_timestamp:
                             type: integer
-                            description: |
+                            description: >
                               The timestamp of the moment the summary began, in **milliseconds**, with 0 being the start
                               of the conversation. Only present if timestamps were included in the transcript that was
                               used for the job, or if the job input was an audio file.
                           end_timestamp:
                             type: integer
-                            description: |
+                            description: >
                               The timestamp of the moment the summary ended, in **milliseconds**, with 0 being the start
                               of the conversation. Only present if timestamps were included in the transcript that was
                               used for the associated job, or if the job input was an audio file.
                           start_time:
                             type: string
-                            description: |
+                            description: >
                               The start time of the summary, in human-readable format: **00:01:23**. Only present if 
                               timestamps were included in the transcript that was used for the associated job, 
                               or if the job input was an audio file.
                           end_time:
                             type: string
-                            description: |
+                            description: >
                               The end time of the summary, in human-readable format: **00:04:56**. Only present if 
                               timestamps were included in the transcript that was used for the associated job, 
                               or if the job input was an audio file.
                           start_index:
                             type: integer
-                            description: |
+                            description: >
                               The start index of the `text`, with 0 being the start of the start of the transcript.
                               This is used in place of the `start_time` and `start_timestamps` when no timestamps 
                               were provided in the original transcript input.
                           end_index:
                             type: integer
-                            description: |
+                            description: >
                               The end index of the `text`, with 0 being the start of the start of the transcript.
                               This is used in place of the `end_time` and `end_timestamps` when no timestamps 
                               were provided in the original transcript input.
@@ -158,34 +158,34 @@ components:
                                   description: The utterance; the text of what the speaker said on the their turn.
                                 speaker:
                                   type: string
-                                  description: |
+                                  description: >
                                     The assigned letter of the speaker, from `A` through `Z`.
                                 start_timestamp:
                                   type: integer
-                                  description: |
+                                  description: >
                                     The timestamp of the moment the utterance began, in **milliseconds**, with 0 being the start
                                     of the conversation.
                                 end_timestamp:
                                   type: integer
-                                  description: |
+                                  description: >
                                     The timestamp of the moment the utterance ended, in **milliseconds**, with 0 being the start
                                     of the conversation.
                                 start_time:
                                   type: string
-                                  description: |
+                                  description: >
                                     The start time of the utterance, in human-readable format: **00:01:23**.
                                 end_time:
                                   type: string
-                                  description: |
+                                  description: >
                                     The end time of the utterance, in human-readable format: **00:04:56**.
                                 start_index:
                                   type: integer
-                                  description: |
+                                  description: >
                                     Used in place of the `start_time` and `start_timestamps` when no timestamps 
                                     were provided in the original transcript input.
                                 end_index:
                                   type: integer
-                                  description: |
+                                  description: >
                                     Used in place of the `end_time` and `end_timestamps` when no timestamps 
                                     were provided in the original transcript input.
     ShortSummary:
@@ -199,7 +199,7 @@ components:
               properties:
                 short_summary:
                   type: string
-                  description: |
+                  description: >
                     In most cases, the Short Summary is a single sentence long. It's structured in the 
                     following format: _The speakers discussed Topic 1, Topic 2, and Topic 3_, whereas 
                     each topic corresponds to an important point that was discussed in the conversation. 
@@ -209,7 +209,7 @@ components:
       properties:
         transcript:
           type: string
-          description: |
+          description: >
             A **.txt** file formatted in the following manner 
             (timestamps optional and can be placed anywhere on the line).
             `source` must be set to `generic`.
@@ -222,7 +222,7 @@ components:
       type: object
       properties:
         audio_file:
-          description: |
+          description: >
             Supported audio file formats include **flac**, **m4a**, **mp3**, **mpga**, **ogg**, and **wav**.
             `source` must be set to `audio`.
           type: string
@@ -232,7 +232,7 @@ components:
       properties:
         error:
           type: string
-          description: |
+          description: >
             When providing an `order_by` parameter, it should be one of: `time_started`, `-time_started`, 
             `time_completed`, `-time_completed`.
       example:
@@ -242,7 +242,7 @@ components:
       properties:
         error:
           type: string
-          description: |
+          description: >
             When providing a `transcript_id`, the `source` parameter needs to be set to `wordcab_transcript`.
       example:
         error: When providing a 'transcript_id', set the 'source' parameter to 'wordcab_transcript'.
@@ -251,7 +251,7 @@ components:
       properties:
         error:
           type: string
-          description: |
+          description: >
             When using `wordcab_transcript` as your `source`, there must be a `transcript_id` parameter.
       example:
         error: When using 'wordcab_transcript' as your 'source', you must include a 'transcript_id'.
@@ -260,7 +260,7 @@ components:
       properties:
         error:
           type: string
-          description: |
+          description: >
             The `transcript_id` that was entered wasn't found, the transcript hasn't finished processing, 
             or there was an error in the transcription process.
       example:
@@ -278,7 +278,7 @@ components:
       properties:
         error:
           type: string
-          description: |
+          description: >
             `summary_lens` should be a number from 1-5, or a comma-seperated 
             list of numbers 1-5 (ex. '1,3,5').
       example:
@@ -288,7 +288,7 @@ components:
       properties:
         error:
           type: string
-          description: |
+          description: >
             You need to enter a comma-seperated list of one or more `summary_terms` in order 
             to generate a focused summary.
       example:
@@ -314,7 +314,7 @@ components:
       properties:
         error:
           type: string
-          description: |
+          description: >
             You meed to correctly structure a JSON-formatted transcript: 
             ```
             {
@@ -414,7 +414,7 @@ paths:
         - name: min_created
           in: query
           required: false
-          description: |
+          description: >
             You can use the [ISO 8601](https://www.w3.org/TR/NOTE-datetime) format (YYYY-MM-DD or YYYY-MM-DDThh:mm:ss) 
             or [Unix timestamps](https://www.unixtimestamp.com/) for the date  parameters. The UTC time zone is assumed. 
             You can find a few examples below. 
@@ -428,7 +428,7 @@ paths:
         - name: max_created
           in: query
           required: false
-          description: |
+          description: >
             You can use the [ISO 8601](https://www.w3.org/TR/NOTE-datetime) format (YYYY-MM-DD or YYYY-MM-DDThh:mm:ss) 
             or [Unix timestamps](https://www.unixtimestamp.com/) for the date  parameters. The UTC time zone is assumed. 
             You can find a few examples below. 
@@ -442,7 +442,7 @@ paths:
         - name: tags
           in: query
           required: false
-          description: |
+          description: >
             A comma-seperated string consisting of existing `tags` (for more on tags, see the 
             [**/summarize/**](http://127.0.0.1:8080/#tag/Jobs/paths/~1summarize~1/post) endpoint.
             Wordcab will filter stats to only account for the specified tags.
@@ -488,14 +488,14 @@ paths:
       tags:
         - Summarize
       summary: Start Job
-      description: |
+      description: >
         Initiate a summary job with an audio file, text transcript, or JSON object. Note that a trailing slash
         is required in **/summarize/**.
       parameters:
         - name: X-Wordcab-Metadata-SomeKey
           in: header
           required: false
-          description: |
+          description: >
             To add metadata to your job, simply add `X-Wordcab-Metadata-SomeKey` headers to your **/summarize/** request, 
             where `SomeKey` is _a key of your choice_. A metadata object with the key-value pairs you initially set 
             will be saved to your job object.
@@ -515,7 +515,7 @@ paths:
         - name: source
           in: query
           required: true
-          description: |
+          description: >
             Declare the source of the data that you want to summarize. Note that some sources have different 
             parameter requirements.
             * `generic` - Generic-format .txt and JSON transcripts
@@ -545,7 +545,7 @@ paths:
         - name: summary_type
           in: query
           required: true
-          description: |
+          description: >
             The type of summary you want to generate. 
             * `narrative` - Wordcab's default summary type, which aims to produce a detailed, bullet point style summary
             * `short` - A single-sentence summary that aims to capture the essence of a conversation in the following format: _The speakers discussed X, Y, and Z_.
@@ -557,7 +557,7 @@ paths:
         - name: summary_lens
           in: query
           required: false
-          description: |
+          description: >
             A comma-seperated string of numbers `1` through `5`. `1` corresponds to the shortest
             summary length, and `5` to the longest. Only required when `summary_type` is set to `narrative`
           schema:
@@ -567,7 +567,7 @@ paths:
         - name: transcript_id
           in: query
           required: false
-          description: |
+          description: >
             Required only when `source` is set to `wordcab_transcript`. Represents the id of a processed
             Wordcab transcript.
           schema:
@@ -576,7 +576,7 @@ paths:
 #        - name: summary_terms
 #          in: query
 #          required: false
-#          description: |
+#          description: >
 #            Required when `summary_type` is set to `focused` (otherwise ignored). This is a comma-seperated list of
 #            terms that you want to search for and summarize in your source input.
 #          schema:
@@ -585,7 +585,7 @@ paths:
         - name: signed_url
           in: query
           required: false
-          description: |
+          description: >
             Required when `source` is set to `signed_url`. An AWS or GCP-signed URL that points to an **.mp3** audio file.
           schema:
             type: string
@@ -593,7 +593,7 @@ paths:
         - name: tags
           in: query
           required: false
-          description: |
+          description: >
             A comma-seperated string containing tags you'd like to attribute to your job. This is particularly helpful
             when you want to see spend and request stats for a particular subset of customers.
           schema:
@@ -602,7 +602,7 @@ paths:
         - name: split_long_utterances
           in: query
           required: false
-          description: |
+          description: >
             Splits up speaker utterances that are overly long. This results in generally more accurate, but
             slightly longer summaries.
           schema:
@@ -612,7 +612,7 @@ paths:
         - name: pipeline
           in: query
           required: false
-          description: |
+          description: >
             A comma-seperated list of actions to take upon initiating the job. Generally, there is no need to 
             change this, unless you use `transcribe` on its own - this will just generate a Wordcab transcript, and
             you can use the resulting `transcript_id` for further downstream tasks.
@@ -623,7 +623,7 @@ paths:
         - name: ephemeral_data
           in: query
           required: false
-          description: |
+          description: >
             <span style="color:red;">Warning</span>: requires 
             <a href="https://wordcab.com/account/webhook-portal/" target="_blank">webhooks to be enabled</a>.
             This is because your webhooks will receive all processed data at once, instead of only a job reference.
@@ -643,7 +643,7 @@ paths:
               properties:
                 transcript:
                   type: array
-                  description: |
+                  description: >
                     The format for a JSON transcript is an array of strings that each include a **speaker label** 
                     followed by a **colon**, then a **space** and the **utterance** (what that speaker actually said). 
                     You can add an optional timestamp (formatted as in the example below) for every array item.
@@ -719,7 +719,7 @@ paths:
         - name: page_size
           in: query
           required: false
-          description: |
+          description: >
             The number of jobs you'd like to see per response. If there are more jobs than `page_size`, 
             you'll be provided a link to navigate to the next `page`.
           schema:
@@ -729,7 +729,7 @@ paths:
         - name: order_by
           in: query
           required: false
-          description: |
+          description: >
             The order of the returned jobs. Defaults to `-time_started` 
             (descending, based on the time the job was created).
           schema:
@@ -760,7 +760,7 @@ paths:
                       properties:
                         job_status:
                           type: string
-                          description: |
+                          description: >
                             The status of your job.
                             * `Pending` - The job object has been created and is about to be queued
                             * `ItemQueued` - The job has been queued
@@ -782,13 +782,13 @@ paths:
                           description: The `display_name` that was initially set during job creation.
                         transcript_id:
                           type: string
-                          description: |
+                          description: >
                             The `transcript_id` of the associated Wordcab transcript object. You can use a single 
                             `transcript_id` to generate multiple summaries or inspect the transcript itself with the 
                             **/transcripts** endpoint.
                         summary_details:
                           type: object
-                          description: |
+                          description: >
                             Details about the summary object that was created when the job was initiated, including the 
                             `summary_id`, which you can use to retrieve the generated summary.
                           properties:
@@ -865,7 +865,7 @@ paths:
                 properties:
                   job_status:
                     type: string
-                    description: |
+                    description: >
                       The status of your job.
                       * `Pending` - The job object has been created and is about to be queued
                       * `ItemQueued` - The job has been queued
@@ -884,7 +884,7 @@ paths:
                     description: Your job's id - keep this handy!
                   transcript_id:
                     type: string
-                    description: |
+                    description: >
                       The `transcript_id` of the associated Wordcab transcript object. You can use a single 
                       `transcript_id` to generate multiple summaries or inspect the transcript itself with the 
                       **/transcripts** endpoint.
@@ -896,7 +896,7 @@ paths:
                     description: The ISO 8601 timestamp for when the job was initiated.
                   settings:
                     type: object
-                    description: |
+                    description: >
                       The settings that were initially set during job creation. For detailed descriptions
                       of each, see the **/summarize/** endpoint.
                     properties:
@@ -910,7 +910,7 @@ paths:
                         type: boolean
                   summary_details:
                     type: object
-                    description: |
+                    description: >
                       Details about the summary object that was created when the job was initiated, including the 
                       `summary_id`, which you can use to retrieve the generated summary. For more detailed descriptions 
                       of the other details, please see the **/summarize/** endpoint.
@@ -973,7 +973,7 @@ paths:
       tags:
         - Jobs
       summary: Delete Job
-      description: |
+      description: >
         Delete a job using the `job_name` generated during job creation. Note that this also deletes any associated
         transcript and summary. If you are using an associated `transcript_id` in multiple jobs, these will be affected.
       parameters:
@@ -1024,7 +1024,7 @@ paths:
         - name: page_size
           in: query
           required: false
-          description: |
+          description: >
             The number of transcripts you'd like to see per response. If there are more transcripts than `page_size`, 
             you'll be provided a link to navigate to the next `page`.
           schema:
@@ -1058,7 +1058,7 @@ paths:
                           description: The id of the transcript object.
                           job_id_set:
                             type: array
-                            description: |
+                            description: >
                               A set of `job_names` associated with the transcript. There can be more than one 
                               `job_name` because a `transcript_id` can be used to generate multiple summaries,
                               and each summary process is a new job.
@@ -1066,7 +1066,7 @@ paths:
                               type: string
                           summary_id_set:
                             type: array
-                            description: |
+                            description: >
                               A set of `summary_ids` associated with the transcript. There can be more than one 
                               `summary_id` because a `transcript_id` can be used to generate multiple summaries.
                             items:
@@ -1123,7 +1123,7 @@ paths:
                     description: The id of the transcript object.
                   job_id_set:
                     type: array
-                    description: |
+                    description: >
                       A set of `job_names` associated with the transcript. There can be more than one 
                       `job_name` because a `transcript_id` can be used to generate multiple summaries,
                       and each summary process is a new job.
@@ -1131,14 +1131,14 @@ paths:
                       type: string
                   summary_id_set:
                     type: array
-                    description: |
+                    description: >
                       A set of `summary_ids` associated with the transcript. There can be more than one 
                       `summary_id` because a `transcript_id` can be used to generate multiple summaries.
                     items:
                       type: string
                   transcript:
                     type: array
-                    description: |
+                    description: >
                       A structured transcript, in the form of an array of objects representing 
                       the turn-by-turn of what was said. Each object has the `text` of what was said,
                       the `speaker` who said it, and either the `start_timestamp` and `end_timestamp`
@@ -1152,42 +1152,42 @@ paths:
                           description: The utterance; the text of what the speaker said on the their turn.
                         speaker:
                           type: string
-                          description: |
+                          description: >
                             The assigned letter of the speaker, from `A` through `Z`. This is used as a key in 
                             the `speaker_map` object, with the value being the associated label.
                         start_timestamp:
                           type: integer
-                          description: |
+                          description: >
                             The timestamp of the moment the utterance began, in **milliseconds**, with 0 being the start
                             of the conversation. Only present if timestamps were included in the transcript that was
                             used as input for the job, or if the job input was an audio file.
                         end_timestamp:
                           type: integer
-                          description: |
+                          description: >
                             The timestamp of the moment the utterance ended, in **milliseconds**, with 0 being the start
                             of the conversation. Only present if timestamps were included in the transcript that was
                             used as input for the associated job, or if the job input was an audio file.
                         start_time:
                           type: string
-                          description: |
+                          description: >
                             The start time of the utterance, in human-readable format: **00:01:23**. Only present if 
                             timestamps were included in the transcript that was used as input for the associated job, 
                             or if the job input was an audio file.
                         end_time:
                           type: string
-                          description: |
+                          description: >
                             The end time of the utterance, in human-readable format: **00:04:56**. Only present if 
                             timestamps were included in the transcript that was used as input for the associated job, 
                             or if the job input was an audio file.
                         start_index:
                           type: integer
-                          description: |
+                          description: >
                             The start index of the `text`, with 0 being the start of the start of the transcript.
                             This is used in place of the `start_time` and `start_timestamps` when no timestamps 
                             were provided in the original transcript input.
                         end_index:
                           type: integer
-                          description: |
+                          description: >
                             The end index of the `text`, with 0 being the start of the start of the transcript.
                             This is used in place of the `end_time` and `end_timestamps` when no timestamps 
                             were provided in the original transcript input.
@@ -1196,7 +1196,7 @@ paths:
                     properties:
                       A-Z:
                         type: string
-                        description: |
+                        description: >
                           The key can be any letter `A` through `Z`. This key corresponds to the `speaker` value
                           in the `transcript`. The value is the assigned speaker label, which defaults to 
                           **SPEAKER [A-Z]** (for example, 'SPEAKER B'). You can use the `speaker_map` to quickly 
@@ -1261,7 +1261,7 @@ paths:
         - name: page_size
           in: query
           required: false
-          description: |
+          description: >
             The number of summaries you'd like to see per response. If there are more summaries than `page_size`, 
             you'll be provided a link to navigate to the next `page`.
           schema:
@@ -1292,7 +1292,7 @@ paths:
                       properties:
                         job_status:
                           type: string
-                          description: |
+                          description: >
                             The `status` of the associated job.
                             * `Pending` - The job object has been created and is about to be queued
                             * `ItemQueued` - The job has been queued
