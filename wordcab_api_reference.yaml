@@ -71,9 +71,10 @@ components:
           enum: [ narrative, short ]
         speaker_map:
           type: object
-          properties:
-            A-Z:
+          patternProperties:
+            '^[A-Z]$':
               type: string
+              pattern: '^[A-Z]$'
               description: >
                 The key can be any letter `A` through `Z`. The value is the assigned speaker label, which defaults to 
                 **SPEAKER [A-Z]** (for example, 'SPEAKER B').
@@ -92,8 +93,9 @@ components:
                 A narrative-style summary split into individual 'bullets', with each bullet having a corresponding 
                 transcript object.
               properties:
-                1-5:
+                '^[1-5]$':
                   type: object
+                  patter: '^[1-5]$'
                   description: >
                     The key is a number from `1` through `5`, represented as a **string** (for example, '3').
                     Each number represents the level of detail of the corresponding summary. `1` Would be the 
@@ -1193,9 +1195,10 @@ paths:
                             were provided in the original transcript input.
                   speaker_map:
                     type: object
-                    properties:
-                      A-Z:
+                    patternProperties:
+                      '^[A-Z]$':
                         type: string
+                        pattern: '^[A-Z]$'
                         description: >
                           The key can be any letter `A` through `Z`. This key corresponds to the `speaker` value
                           in the `transcript`. The value is the assigned speaker label, which defaults to 
@@ -1301,9 +1304,10 @@ paths:
                     description: The id of the transcript object.
                   speaker_map:
                     type: object
-                    properties:
-                      A-Z:
+                    patternProperties:
+                      '^[A-Z]$':
                         type: string
+                        pattern: '^[A-Z]$'
                         description: >
                           The new speaker map that was set.
                 example:
