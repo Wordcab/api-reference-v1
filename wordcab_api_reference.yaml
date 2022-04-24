@@ -1279,7 +1279,7 @@ paths:
                   patternProperties:
                     '^[A-Z]$':
                       type: string
-                      patter: '^[A-Z]$'
+                      pattern: '^[A-Z]$'
             example:
               {
                 "speaker_map": {
