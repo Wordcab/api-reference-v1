@@ -229,6 +229,14 @@ components:
             `source` must be set to `audio`.
           type: string
           format: binary
+    VTTFile:
+      type: object
+      properties:
+        vtt_file:
+          description: >
+            Make sure your .vtt file is formatted correctly (you can use [this validator](https://quuz.org/webvtt/)).
+          type: string
+          format: binary
     InvalidOrderBy:
       type: object
       properties:
@@ -521,12 +529,12 @@ paths:
             Declare the source of the data that you want to summarize. Note that some sources have different parameter requirements.
             * `generic` - Generic-format .txt and JSON transcripts
             * `audio` - For uploaded audio files
-            * `wordcab_transcript` - Summarize Wordcab transcripts using a `transcript_id` (required for this source)
+            * `wordcab_transcript` - Summarize Wordcab transcripts using a `transcript_id`
             * `signed_url` - AWS/GCP signed URLs
-            * `assembly_ai` - Use the JSON output from AssemblyAI's `utterances` object as input
-            * `deepgram` - Use the JSON output from Deepgram's `utterances` object as input
-            * `rev` - Use the JSON output from Rev's `monologues` object as input
-            * `zoom_api` - Use vtt transcript output from Zoom's API
+            * `assembly_ai` - Use the JSON array from AssemblyAI's `utterances` object as input
+            * `deepgram` - Use the JSON array from Deepgram's `utterances` object as input
+            * `rev_ai` - Use the JSON array from Rev.ai's `monologues` object as input
+            * `vtt` - Either a .vtt file, or raw vtt text in the request body - you can check proper vtt formatting [here](https://quuz.org/webvtt/)  
             * `otter` - Read about Otter.ai transcript formatting [here](https://wordcab.com/blog/summarizing-your-otterai-transcripts-in-wordcab/)
             * `fireflies` - Read about Fireflies.ai transcript formatting [here](https://wordcab.com/blog/summarizing-your-firefliesai-transcripts-in-wordcab/)
             * `sonix` - Read about Sonix.ai transcript formatting [here](https://wordcab.com/blog/summarizing-your-sonixai-transcripts-in-wordcab/)
@@ -534,7 +542,7 @@ paths:
           schema:
             type: string
             default: generic
-            enum: [generic, audio, wordcab_transcript, signed_url, assembly_ai, deepgram, rev, zoom_api, otter, fireflies, sonix, descript]
+            enum: [generic, audio, wordcab_transcript, signed_url, assembly_ai, deepgram, rev_ai, vtt, otter, fireflies, sonix, descript]
           example: generic
         - name: display_name
           in: query
@@ -671,6 +679,13 @@ paths:
               oneOf:
                 - $ref: "#/components/schemas/TranscriptFile"
                 - $ref: "#/components/schemas/AudioFile"
+                - $ref: "#/components/schemas/VTTFile"
+          text/plain:
+            schema:
+              type: string
+              description: >
+                If `source` is set to `vtt`, you can use raw vtt text in the request body. Make sure your vtt is 
+                formatted correctly (you can use [this validator](https://quuz.org/webvtt/)).
       responses:
         '201':
           description: Successfully created a job
