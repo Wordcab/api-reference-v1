@@ -13,7 +13,7 @@ info:
     you’ll be redirected to your [Dashboard](https://wordcab.com/existing-summaries/). From there, head to your 
     [Account](https://wordcab.com/account/details/) page, and click the API Key tab.
     ## Postman Collection
-    [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/11291760-6f453e35-dee9-490d-84cc-fcd37d04fbb0?action=collection%2Ffork&collection-url=entityId%3D11291760-6f453e35-dee9-490d-84cc-fcd37d04fbb0%26entityType%3Dcollection%26workspaceId%3D38faea26-9850-4351-be7e-0764297a460a)    
+    [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/11291760-6a87b562-531a-4394-a1b3-a5137066deaa?action=collection%2Ffork&collection-url=entityId%3D11291760-6a87b562-531a-4394-a1b3-a5137066deaa%26entityType%3Dcollection%26workspaceId%3D38faea26-9850-4351-be7e-0764297a460a)
     ## Webhook Portal
     Wordcab partners with [Svix](https://svix.com) to provide users with a best-in-class webhook experience. You can 
     find a link to your Webhook Portal on your [Account](https://wordcab.com/account/webhook-portal/) page. 
