@@ -709,9 +709,6 @@ paths:
           example: false
       requestBody:
         content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/jsonBody"
           multipart/form-data:
             schema:
               oneOf:
