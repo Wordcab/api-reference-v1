@@ -709,16 +709,17 @@ paths:
             default: false
           example: false
       requestBody:
-        application/json:
-          $ref: "#/components/schemas/jsonBody"
-        multipart/form-data:
-          schema:
-            oneOf:
-              - $ref: "#/components/schemas/TranscriptFile"
-              - $ref: "#/components/schemas/AudioFile"
-              - $ref: "#/components/schemas/VTTFile"
-        text/plain:
-          $ref: "#/components/schemas/textBody"
+        content:
+          application/json:
+            $ref: "#/components/schemas/jsonBody"
+          multipart/form-data:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/TranscriptFile"
+                - $ref: "#/components/schemas/AudioFile"
+                - $ref: "#/components/schemas/VTTFile"
+          text/plain:
+            $ref: "#/components/schemas/textBody"
       responses:
         '201':
           description: Successfully created a job
