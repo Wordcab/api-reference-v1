@@ -36,6 +36,59 @@ components:
       type: apiKey
       in: query
       name: apikey
+  requestBodies:
+    jsonBody:
+      description: X
+      required: false
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              transcript:
+                type: array
+                description: >
+                  The format for a JSON transcript is an array of strings that each include a **speaker label** 
+                  followed by a **colon**, then a **space** and the **utterance** (what that speaker actually said). 
+                  You can add an optional timestamp (formatted as in the example below) for every array item.
+                  `source` must be set to `generic`.
+                  ```
+                  {
+                    "transcript": [
+                      "[00:01:23 --> 00:01:25] Joe: This is an example of a generic transcript.",
+                      "[00:01:26 --> 00:01:27] Jill: Oh wow!"
+                    ]
+                  }
+                  ```
+                items:
+                  type: string
+          example:
+            {
+              "transcript": [
+                "[00:01:23 --> 00:01:25] Joe: This is an example of a generic transcript.",
+                "[00:01:26 --> 00:01:27] Jill: Oh wow!"
+              ]
+            }
+    formBody:
+      description: X
+      required: false
+      content:
+        multipart/form-data:
+          schema:
+            oneOf:
+              - $ref: "#/components/schemas/TranscriptFile"
+              - $ref: "#/components/schemas/AudioFile"
+              - $ref: "#/components/schemas/VTTFile"
+    textBody:
+      description: X
+      required: false
+      content:
+          text/plain:
+            schema:
+              type: string
+              description: >
+                If `source` is set to `vtt`, you can use raw vtt text in the request body. Make sure your vtt is 
+                formatted correctly (you can use [this validator](https://quuz.org/webvtt/)).
   schemas:
     BaseSummary:
       type: object
@@ -453,9 +506,8 @@ paths:
           in: query
           required: false
           description: >
-            A comma-seperated string consisting of existing `tags` (for more on tags, see the 
-            **/summarize** endpoint.
-            Wordcab will filter stats to only account for the specified tags.
+            A comma-seperated string consisting of existing `tags`. Wordcab will filter stats to only account for the 
+            specified tags.
           schema:
             type: string
           example: "customer_42,paid_users,vip_users"
@@ -467,15 +519,48 @@ paths:
               schema:
                 type: object
                 properties:
-                  job_name:
+                  account_email:
                     type: string
-                    description: Newly generated `job_name`, which you can use to poll the **/jobs** endpoint.
+                    description: The associated account email.
+                  plan:
+                    type: string
+                    description: Your current free or paid plan.
+                  monthly_request_limit:
+                    type: integer
+                    description: >
+                      Your monthly request limit - if you'd like to raise this, please contact info@wordcab.com
+                  request_count:
+                    type: integer
+                    description: The number of successful requests during the specified date range.
+                  minutes_summarized:
+                    type: integer
+                    description: The number of minutes summarized during the specified date range.
+                  transcripts_summarized:
+                    type: integer
+                    description: The number of transcripts summarized during the specified date range.
+                  metered_charge:
+                    type: integer
+                    description: >
+                      The metered charge for the specified date range. This takes into account all successful requests.
+                  min_created:
+                    type: string
+                    description: >
+                      The starting date range for the included stats - either specified by the user or set automatically.
+                  max_created:
+                    type: string
+                    description: >
+                      The ending date range for the included stats - either specified by the user or set automatically.
+                  tags:
+                    type: array
+                    description: The user-specified tags used to filter the stats request.
+                    items:
+                      type: string
                 example:
                   {
                     "account_email": "hello@wordcab.com",
                     "plan": "Metered",
-                    "monthly_meeting_limit": 10000,
-                    "meeting_count": 1000,
+                    "monthly_request_limit": 10000,
+                    "request_count": 1000,
                     "minutes_summarized": 1500,
                     "transcripts_summarized": 850,
                     "metered_charge": "$198.00",
@@ -534,7 +619,7 @@ paths:
             * `assembly_ai` - Use the JSON array from AssemblyAI's `utterances` object as input
             * `deepgram` - Use the JSON array from Deepgram's `utterances` object as input
             * `rev_ai` - Use the JSON array from Rev.ai's `monologues` object as input
-            * `vtt` - Either a .vtt file, or raw vtt text in the request body - you can check proper vtt formatting [here](https://quuz.org/webvtt/)  
+            * `vtt` - Either a .vtt file, or raw vtt text in the request body - you can check proper vtt formatting [here](https://quuz.org/webvtt/). Note that speaker labels are required.  
             * `otter` - Read about Otter.ai transcript formatting [here](https://wordcab.com/blog/summarizing-your-otterai-transcripts-in-wordcab/)
             * `fireflies` - Read about Fireflies.ai transcript formatting [here](https://wordcab.com/blog/summarizing-your-firefliesai-transcripts-in-wordcab/)
             * `sonix` - Read about Sonix.ai transcript formatting [here](https://wordcab.com/blog/summarizing-your-sonixai-transcripts-in-wordcab/)
@@ -645,47 +730,10 @@ paths:
             default: false
           example: false
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                transcript:
-                  type: array
-                  description: >
-                    The format for a JSON transcript is an array of strings that each include a **speaker label** 
-                    followed by a **colon**, then a **space** and the **utterance** (what that speaker actually said). 
-                    You can add an optional timestamp (formatted as in the example below) for every array item.
-                    `source` must be set to `generic`.
-                    ```
-                    {
-                      "transcript": [
-                        "[00:01:23 --> 00:01:25] Joe: This is an example of a generic transcript.",
-                        "[00:01:26 --> 00:01:27] Jill: Oh wow!"
-                      ]
-                    }
-                    ```
-                  items:
-                    type: string
-            example:
-              {
-                "transcript": [
-                  "[00:01:23 --> 00:01:25] Joe: This is an example of a generic transcript.",
-                  "[00:01:26 --> 00:01:27] Jill: Oh wow!"
-                ]
-              }
-          multipart/form-data:
-            schema:
-              oneOf:
-                - $ref: "#/components/schemas/TranscriptFile"
-                - $ref: "#/components/schemas/AudioFile"
-                - $ref: "#/components/schemas/VTTFile"
-          text/plain:
-            schema:
-              type: string
-              description: >
-                If `source` is set to `vtt`, you can use raw vtt text in the request body. Make sure your vtt is 
-                formatted correctly (you can use [this validator](https://quuz.org/webvtt/)).
+        oneOf:
+          - $ref: "#/components/requestBodies/jsonBody"
+          - $ref: "#/components/requestBodies/formBody"
+          - $ref: "#/components/requestBodies/textBody"
       responses:
         '201':
           description: Successfully created a job
