@@ -39,31 +39,31 @@ components:
   schemas:
     jsonBody:
       type: object
-        properties:
-          transcript:
-            type: array
-            description: >
-              The format for a JSON transcript is an array of strings that each include a **speaker label** 
-              followed by a **colon**, then a **space** and the **utterance** (what that speaker actually said). 
-              You can add an optional timestamp (formatted as in the example below) for every array item.
-              `source` must be set to `generic`.
-              ```
-              {
-                "transcript": [
-                  "[00:01:23 --> 00:01:25] Joe: This is an example of a generic transcript.",
-                  "[00:01:26 --> 00:01:27] Jill: Oh wow!"
-                ]
-              }
-              ```
-            items:
-              type: string
-        example:
-          {
-            "transcript": [
-              "[00:01:23 --> 00:01:25] Joe: This is an example of a generic transcript.",
-              "[00:01:26 --> 00:01:27] Jill: Oh wow!"
-            ]
-          }
+      properties:
+        transcript:
+          type: array
+          description: >
+            The format for a JSON transcript is an array of strings that each include a **speaker label** 
+            followed by a **colon**, then a **space** and the **utterance** (what that speaker actually said). 
+            You can add an optional timestamp (formatted as in the example below) for every array item.
+            `source` must be set to `generic`.
+            ```
+            {
+              "transcript": [
+                "[00:01:23 --> 00:01:25] Joe: This is an example of a generic transcript.",
+                "[00:01:26 --> 00:01:27] Jill: Oh wow!"
+              ]
+            }
+            ```
+          items:
+            type: string
+      example:
+        {
+          "transcript": [
+            "[00:01:23 --> 00:01:25] Joe: This is an example of a generic transcript.",
+            "[00:01:26 --> 00:01:27] Jill: Oh wow!"
+          ]
+        }
     textBody:
       type: string
       description: >
