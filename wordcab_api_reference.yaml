@@ -243,10 +243,8 @@ components:
       properties:
         transcript:
           type: string
-          description: >
-            A **.txt** file formatted in the following manner 
-            (timestamps optional and can be placed anywhere on the line).
-            `source` must be set to `generic`.
+          description: |
+            A **.txt** file formatted in the following manner (timestamps optional and can be placed anywhere on the line). `source` must be set to `generic`.
             ```
             [00:01:23 --> 00:01:25] Joe: This is an example of a generic transcript.
             [00:01:26 --> 00:01:27] Jill: Oh wow!
@@ -709,6 +707,9 @@ paths:
           example: false
       requestBody:
         content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/jsonBody"
           multipart/form-data:
             schema:
               oneOf:
