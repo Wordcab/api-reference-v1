@@ -453,7 +453,7 @@ paths:
           required: false
           description: >
             **Format:** ISO 8601 or Unix timestamp<br>
-            **Default Timezone**: UTC<br><br>
+            **Default Timezone**: UTC<br>
             **Description:** You can use the [ISO 8601](https://www.w3.org/TR/NOTE-datetime) format (YYYY-MM-DD or YYYY-MM-DDThh:mm:ss) 
             or [Unix timestamps](https://www.unixtimestamp.com/).
             If you don't specify a datetime, `min_created` will automatically be set to a 
@@ -467,7 +467,7 @@ paths:
           required: false
           description: >
             **Format:** ISO 8601 or Unix timestamp<br>
-            **Default Timezone**: UTC<br><br>
+            **Default Timezone**: UTC<br>
             **Description:** You can use the [ISO 8601](https://www.w3.org/TR/NOTE-datetime) format (YYYY-MM-DD or YYYY-MM-DDThh:mm:ss) 
             or [Unix timestamps](https://www.unixtimestamp.com/).
             If you don't specify a datetime, `max_created` will automatically be set to a 
