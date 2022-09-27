@@ -124,7 +124,7 @@ components:
               properties:
                 '^[1-5]$':
                   type: object
-                  patter: '^[1-5]$'
+                  pattern: '^[1-5]$'
                   description: >
                     The key is a number from `1` through `5`, represented as a **string** (for example, '3').
                     Each number represents the level of detail of the corresponding summary. `1` Would be the 
@@ -452,35 +452,38 @@ paths:
           in: query
           required: false
           description: >
-            You can use the [ISO 8601](https://www.w3.org/TR/NOTE-datetime) format (YYYY-MM-DD or YYYY-MM-DDThh:mm:ss) 
-            or [Unix timestamps](https://www.unixtimestamp.com/) for the date  parameters. The UTC time zone is assumed. 
-            You can find a few examples below. 
-            If you only specify `min_created`, `max_created` will be set to the current date by default.
-            If you don't specify any date range parameters, `min_created` will automatically be set to a 
-            month prior. For example, if the current date is January 15, `min_created` would be set to December 15th, 
-            and `max_created` would be set to January 15th.
+            **Format:** ISO 8601 or Unix timestamp<br>
+            **Default Timezone**: UTC<br><br>
+            
+            **Description:** You can use the [ISO 8601](https://www.w3.org/TR/NOTE-datetime) format (YYYY-MM-DD or YYYY-MM-DDThh:mm:ss) 
+            or [Unix timestamps](https://www.unixtimestamp.com/).
+            If you don't specify a datetime, `min_created` will automatically be set to a 
+            month prior. For example, if the current date is January 15, `min_created` will be set to December 15.
           schema:
             type: string
+            default: ISO 8601 timestamp month prior
           example: "2020-01-01T00:00:00"
         - name: max_created
           in: query
           required: false
           description: >
-            You can use the [ISO 8601](https://www.w3.org/TR/NOTE-datetime) format (YYYY-MM-DD or YYYY-MM-DDThh:mm:ss) 
-            or [Unix timestamps](https://www.unixtimestamp.com/) for the date  parameters. The UTC time zone is assumed. 
-            You can find a few examples below. 
-            If you only specify `max_created`, `min_created` will be set to the day you created your account.
-            If you don't specify any date range parameters, `min_created` will automatically be set to a 
-            month prior. For example, if the current date is January 15, `min_created` would be set to December 15th, 
-            and `max_created` would be set to January 15th.
+            **Format:** ISO 8601 or Unix timestamp<br>
+            **Default Timezone**: UTC<br><br>
+            
+            **Description:** You can use the [ISO 8601](https://www.w3.org/TR/NOTE-datetime) format (YYYY-MM-DD or YYYY-MM-DDThh:mm:ss) 
+            or [Unix timestamps](https://www.unixtimestamp.com/).
+            If you don't specify a datetime, `max_created` will automatically be set to a 
+            month after `min_created`. For example, if the current `min_created` is December 15, `max_created` will be 
+            set to January 15.
           schema:
             type: string
+            default: ISO 8601 timestamp month after min_created
           example: "2023-01-01T00:00:00"
         - name: tags
           in: query
           required: false
           description: >
-            A comma-seperated string consisting of existing `tags`. Wordcab will filter stats to only account for the 
+            A comma-seperated string consisting of user-defined `tags`. Wordcab will filter stats to only account for the 
             specified tags.
           schema:
             type: string
@@ -556,7 +559,7 @@ paths:
     post:
       tags:
         - Summarize
-      summary: Start Job
+      summary: Start Summary
       description: >
         Initiate a summary job with an audio file, text transcript, or JSON object.
       parameters:
@@ -613,20 +616,23 @@ paths:
           in: query
           required: true
           description: |
-            The type of summary you want to generate. 
-            * `narrative` - Wordcab's default summary type, which aims to produce a detailed, bullet point style summary
-            * `short` - A single-sentence summary that aims to capture the essence of a conversation in the following format: _The speakers discussed X, Y, and Z_.
+            The type of summary you want to generate.<br> 
+            * `narrative` - Wordcab's default summary type, which aims to produce a detailed, bullet-point style summary.
+            * `reason_conclusion` - A "reason" summary describing the purpose of the call, and a "conclusion" summary describing the outcome.
           schema:
             type: string
             default: narrative
-            enum: [ narrative, short ]
+            enum: [ narrative, reason_conclusion ]
           example: narrative
         - name: summary_lens
           in: query
           required: false
           description: >
+            **Required for the `narrative` summary type**<br><br>
+            
             A comma-seperated string of numbers `1` through `5`. `1` corresponds to the shortest
-            summary length, and `5` to the longest. Only required when `summary_type` is set to `narrative`.
+            summary length, and `5` to the longest. Note that if you specify more than one number, you will receive
+            multiple summaries.
           schema:
             type: string
             default: "3"
