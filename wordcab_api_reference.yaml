@@ -452,10 +452,10 @@ paths:
           in: query
           required: false
           description: >
-            **Default value:** set to a month prior to the current date.
+            **Default value:** set to a month prior to the current date.<br>
             **Format:** [ISO 8601](https://www.w3.org/TR/NOTE-datetime) or [Unix timestamps](https://www.unixtimestamp.com/)<br>
             **Default Timezone**: UTC<br>
-            **Description:** This parameter allows setting the minimum limit of the specified date range.
+            This parameter allows setting the minimum limit of the specified date range.
             If you don't specify a datetime, `min_created` will automatically be set to a month prior. 
             For example, if the current date is January 15, `min_created` will be set to December 15.
           schema:
@@ -469,7 +469,7 @@ paths:
             **Default value:** set to a month after the `min_created` parameter.
             **Format:** [ISO 8601](https://www.w3.org/TR/NOTE-datetime) or [Unix timestamps](https://www.unixtimestamp.com/)<br>
             **Default Timezone**: UTC<br>
-            **Description:** This parameter allows setting the maximum limit of the specified date range.
+            This parameter allows setting the maximum limit of the specified date range.
             If you don't specify a datetime, `max_created` will automatically be set to a month after `min_created`. 
             For example, if the current `min_created` is December 15, `max_created` will be set to January 15.
           schema:
@@ -487,7 +487,7 @@ paths:
           example: "customer_42,paid_users,vip_users"
       responses:
         '200':
-          description: Successfully retrieved user stats.
+          description: Successfully retrieved user stats
           content:
             application/json:
               schema:
@@ -565,12 +565,12 @@ paths:
           required: false
           description: >
             A metadata object is composed of a key-value pair. To add metadata to your job, you must add 
-            `X-Wordcab-Metadata-<Key>` headers to your **/summarize** request, where `<Key>` is _a key of your choice_. 
+            `X-Wordcab-Metadata-<Key>` headers to your **/summarize** request, where `<Key>` is _a key of your choice_.<br>
             This way a metadata object with the key-value pairs you initially set will be saved to your job object.
             By convention, Wordcab will extract anything after `X-Wordcab-Metadata-` (in this case, `<Key>`), 
-            make the string lowercase, and then convert any dashes to underscores. For example, an 
-            `X-Wordcab-Metadata-UUID` key with a value of `"abc"`, and an `X-Wordcab-Metadata-User-ID` key with a 
-            value of `"123"` will result in the following metadata object when retrieving your job:
+            make the string lowercase, and then convert any dashes to underscores.<br>
+            For example, an `X-Wordcab-Metadata-UUID` key with a value of `"abc"`, and an `X-Wordcab-Metadata-User-ID` 
+            key with a value of `"123"` will result in the following metadata object when retrieving your job:
             ```
             "metadata": {
                 "uuid": "abc",
@@ -584,19 +584,20 @@ paths:
           in: query
           required: true
           description: |
-            Declare the source of the data that you want to summarize. Note that some sources have different parameter requirements.
+            Declare the source of the data that you want to summarize. 📝 Note that some sources have different parameter requirements.
             * `generic` - Generic-format .txt and JSON transcripts
             * `audio` - For uploaded audio files
             * `wordcab_transcript` - Summarize Wordcab transcripts using a `transcript_id`
-            * `signed_url` - AWS/GCP signed URLs
+            * `signed_url` - _AWS_ or _GCP_ signed URLs
             * `assembly_ai` - Use the JSON array from AssemblyAI's `utterances` object as input
             * `deepgram` - Use the JSON array from Deepgram's `utterances` object as input
             * `rev_ai` - Use the JSON array from Rev.ai's `monologues` object as input
-            * `vtt` - Either a .vtt file, or raw vtt text in the request body - you can check proper vtt formatting [here](https://quuz.org/webvtt/). Note that speaker labels are required.  
-            * `otter` - Read about Otter.ai transcript formatting [here](https://wordcab.com/blog/summarizing-your-otterai-transcripts-in-wordcab/)
-            * `fireflies` - Read about Fireflies.ai transcript formatting [here](https://wordcab.com/blog/summarizing-your-firefliesai-transcripts-in-wordcab/)
-            * `sonix` - Read about Sonix.ai transcript formatting [here](https://wordcab.com/blog/summarizing-your-sonixai-transcripts-in-wordcab/)
-            * `descript` - Read about Descript transcript formatting [here](https://wordcab.com/blog/how-to-summarize-descript-transcripts-in-wordcab/)
+            * `vtt` - Either a .vtt file, or raw vtt text in the request body - Learn more about [proper vtt formatting](https://quuz.org/webvtt/). 
+            📝 Note that speaker labels are required.
+            * `otter` - Learn more about [Otter.ai transcript formatting](https://wordcab.com/blog/summarizing-your-otterai-transcripts-in-wordcab/)
+            * `fireflies` - Learn more about [Fireflies.ai transcript formatting](https://wordcab.com/blog/summarizing-your-firefliesai-transcripts-in-wordcab/)
+            * `sonix` - Learn more about [Sonix.ai transcript formatting](https://wordcab.com/blog/summarizing-your-sonixai-transcripts-in-wordcab/)
+            * `descript` - Learn more about [Descript transcript formatting](https://wordcab.com/blog/how-to-summarize-descript-transcripts-in-wordcab/)
           schema:
             type: string
             default: generic
@@ -604,8 +605,10 @@ paths:
           example: generic
         - name: display_name
           in: query
-          required: true
-          description: A human-readable name for your job. Not strictly required, but highly recommended.
+          required: false
+          description: |
+            **Default value:** #TODO
+            A human-readable name for your job. Not strictly required, but highly recommended.
           schema:
             type: string
           example: My Awesome Job
@@ -613,7 +616,8 @@ paths:
           in: query
           required: true
           description: |
-            The type of summary you want to generate.<br> 
+            **Default value:** `narrative`
+            The type of summary you want to generate.
             * `narrative` - Wordcab's default summary type, which aims to produce a detailed, bullet-point style summary.
             * `reason_conclusion` - A "reason" summary describing the purpose of the call, and a "conclusion" summary describing the outcome.
           schema:
@@ -625,11 +629,10 @@ paths:
           in: query
           required: false
           description: >
-            **Required for the `narrative` summary type**<br><br>
-            
-            A comma-seperated string of numbers `1` through `5`. `1` corresponds to the shortest
-            summary length, and `5` to the longest. Note that if you specify more than one number, you will receive
-            multiple summaries.
+            _Required when `summary_type` is set to `narrative`_<br>
+            A comma-separated string of numbers `1` through `5`. `1` corresponds to the shortest
+            summary length, and `5` to the longest.<br>
+            📝 Note that if you specify more than one number, you will receive multiple summaries.
           schema:
             type: string
             default: "3"
@@ -638,25 +641,17 @@ paths:
           in: query
           required: false
           description: >
-            Required when `source` is set to `wordcab_transcript`. Represents the id of a processed
-            Wordcab transcript.
+            _Required when `source` is set to `wordcab_transcript`._<br>
+            Represents the id of a processed Wordcab transcript.
           schema:
             type: string
           example: transcript_KU3IU70e4az3WiJhWsOQI7WPXTRweo8W
-#        - name: summary_terms
-#          in: query
-#          required: false
-#          description: >
-#            Required when `summary_type` is set to `focused` (otherwise ignored). This is a comma-seperated list of
-#            terms that you want to search for and summarize in your source input.
-#          schema:
-#            type: string
-#          example: pricing,refund
         - name: signed_url
           in: query
           required: false
           description: >
-            Required when `source` is set to `signed_url`. An AWS or GCP-signed URL that points to an **.mp3** audio file.
+            _Required when `source` is set to `signed_url`._<br>
+            An _AWS_ or _GCP_ signed URL that points to an audio file.
           schema:
             type: string
           example: "https://s3.us-east-2.amazonaws.com/example-bucket/sales-call.mp3?X-Amz-Security-Token=XYZ…"
@@ -664,8 +659,8 @@ paths:
           in: query
           required: false
           description: >
-            A comma-seperated string containing tags you'd like to attribute to your job. This is particularly helpful
-            when you want to see spend and request stats for a particular subset of customers.
+            A comma-separated string containing tags you'd like to attribute to your job. This is particularly helpful
+            when you want to see summarized minutes and request counts for a particular subset of customers.
           schema:
             type: string
           example: "customer_42,paid_users,vip_users"
@@ -673,8 +668,7 @@ paths:
           in: query
           required: false
           description: >
-            Splits up speaker utterances that are overly long. This results in generally more accurate, but
-            slightly longer summaries.
+            Splits up overly long speaker utterances. This results in generally more accurate but slightly longer summaries.
           schema:
             type: boolean
             default: false
@@ -683,8 +677,9 @@ paths:
           in: query
           required: false
           description: >
-            A comma-seperated list of actions to take upon initiating the job. Generally, there is no need to 
-            change this, unless you use `transcribe` on its own - this will just generate a Wordcab transcript, and
+            **Default value:** `transcribe,summarize`<br>
+            A comma-separated list of actions to take upon initiating the job. Generally, there is no need to 
+            change this, unless you use `transcribe` on its own - this will generate a Wordcab transcript, and
             you can use the resulting `transcript_id` for further downstream tasks.
           schema:
             type: string
@@ -696,9 +691,9 @@ paths:
           description: >
             <span style="color:red;">Warning</span>: requires 
             <a href="https://wordcab.com/account/webhook-portal/" target="_blank">webhooks to be enabled</a>.
-            This is because your webhooks will receive all processed data at once, instead of only a job reference.
-            Ephemeral data provides a convenient, automatic way of removing sensitive data from Wordcab servers. 
-            Note that enabling `ephemeral_data` wipes all sensitive data tied to a particular job. 
+            If set to `true`, your webhooks will receive all processed data simultaneously instead of only a job reference.
+            Ephemeral data provides a convenient, automatic way of removing sensitive data from Wordcab servers.<br>
+            📝 Note that enabling `ephemeral_data` wipes all sensitive data tied to a particular job.
             You will not be able to retrieve a finished job via polling, nor will you be able to reuse any 
             `transcript_id` or `summary_id` tied to the removed job.
           schema:
@@ -729,7 +724,7 @@ paths:
                 properties:
                   job_name:
                     type: string
-                    description: Newly generated `job_name`, which you can use to poll the **/jobs** endpoint.
+                    description: You can use the newly generated `job_name` to poll the **/jobs** endpoint.
                 example:
                   {
                     "job_name": "narrative_summary_UGWCThBPanz7k6IrTkGbg16PcJLbFee6"
