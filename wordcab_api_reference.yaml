@@ -452,43 +452,42 @@ paths:
           in: query
           required: false
           description: >
-            **Format:** ISO 8601 or Unix timestamp<br>
+            **Default value:** set to a month prior to the current date.
+            **Format:** [ISO 8601](https://www.w3.org/TR/NOTE-datetime) or [Unix timestamps](https://www.unixtimestamp.com/)<br>
             **Default Timezone**: UTC<br>
-            **Description:** You can use the [ISO 8601](https://www.w3.org/TR/NOTE-datetime) format (YYYY-MM-DD or YYYY-MM-DDThh:mm:ss) 
-            or [Unix timestamps](https://www.unixtimestamp.com/).
-            If you don't specify a datetime, `min_created` will automatically be set to a 
-            month prior. For example, if the current date is January 15, `min_created` will be set to December 15.
+            **Description:** This parameter allows setting the minimum limit of the specified date range.
+            If you don't specify a datetime, `min_created` will automatically be set to a month prior. 
+            For example, if the current date is January 15, `min_created` will be set to December 15.
           schema:
             type: string
             default: ISO 8601 timestamp month prior
-          example: "2020-01-01T00:00:00"
+          example: "2021-12-15T00:00:00"
         - name: max_created
           in: query
           required: false
           description: >
-            **Format:** ISO 8601 or Unix timestamp<br>
+            **Default value:** set to a month after the `min_created` parameter.
+            **Format:** [ISO 8601](https://www.w3.org/TR/NOTE-datetime) or [Unix timestamps](https://www.unixtimestamp.com/)<br>
             **Default Timezone**: UTC<br>
-            **Description:** You can use the [ISO 8601](https://www.w3.org/TR/NOTE-datetime) format (YYYY-MM-DD or YYYY-MM-DDThh:mm:ss) 
-            or [Unix timestamps](https://www.unixtimestamp.com/).
-            If you don't specify a datetime, `max_created` will automatically be set to a 
-            month after `min_created`. For example, if the current `min_created` is December 15, `max_created` will be 
-            set to January 15.
+            **Description:** This parameter allows setting the maximum limit of the specified date range.
+            If you don't specify a datetime, `max_created` will automatically be set to a month after `min_created`. 
+            For example, if the current `min_created` is December 15, `max_created` will be set to January 15.
           schema:
             type: string
             default: ISO 8601 timestamp month after min_created
-          example: "2023-01-01T00:00:00"
+          example: "2022-01-15T00:00:00"
         - name: tags
           in: query
           required: false
           description: >
-            A comma-seperated string consisting of user-defined `tags`. Wordcab will filter stats to only account for the 
-            specified tags.
+            A comma-separated string consisting of user-defined `tags`. Wordcab will filter stats to only account for 
+            the specified tags.
           schema:
             type: string
           example: "customer_42,paid_users,vip_users"
       responses:
         '200':
-          description: Successfully retrieved user stats
+          description: Successfully retrieved user stats.
           content:
             application/json:
               schema:
@@ -499,11 +498,11 @@ paths:
                     description: The associated account email.
                   plan:
                     type: string
-                    description: Your current free or paid plan.
+                    description: Your current subscription, free or paid plan.
                   monthly_request_limit:
                     type: integer
                     description: >
-                      Your monthly request limit - if you'd like to raise this, please contact info@wordcab.com.
+                      Your monthly request limit (contact info@wordcab.com to raise it).
                   request_count:
                     type: integer
                     description: The number of successful requests during the specified date range.
@@ -561,14 +560,14 @@ paths:
       description: >
         Initiate a summary job with an audio file, text transcript, or JSON object.
       parameters:
-        - name: X-Wordcab-Metadata-SomeKey
+        - name: X-Wordcab-Metadata-<Key>
           in: header
           required: false
           description: >
-            To add metadata to your job, simply add `X-Wordcab-Metadata-SomeKey` headers to your **/summarize** request, 
-            where `SomeKey` is _a key of your choice_. A metadata object with the key-value pairs you initially set 
-            will be saved to your job object.
-            By convention, Wordcab will extract anything after `X-Wordcab-Metadata-` (in this case, `SomeKey`), 
+            A metadata object is composed of a key-value pair. To add metadata to your job, you must add 
+            `X-Wordcab-Metadata-<Key>` headers to your **/summarize** request, where `<Key>` is _a key of your choice_. 
+            This way a metadata object with the key-value pairs you initially set will be saved to your job object.
+            By convention, Wordcab will extract anything after `X-Wordcab-Metadata-` (in this case, `<Key>`), 
             make the string lowercase, and then convert any dashes to underscores. For example, an 
             `X-Wordcab-Metadata-UUID` key with a value of `"abc"`, and an `X-Wordcab-Metadata-User-ID` key with a 
             value of `"123"` will result in the following metadata object when retrieving your job:
