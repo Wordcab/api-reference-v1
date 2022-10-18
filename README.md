@@ -21,3 +21,25 @@ different endpoints.
 ## Contact
 
 If you have any questions, please contact us at [info@wordcab.com](mailto:info@wordcab.com).
+
+## Python example
+
+```bash
+# Activate your python environment
+$ pip install python-dotenv
+```
+
+Be sure to include your Wordcab API key in a `.env` file in the same directory as your script.  
+You can find your API key in your [Wordcab dashboard](https://wordcab.com/dashboard/).
+
+Your `.env` file should look like this:
+
+```bash
+WORDCAB_API_KEY=YOUR_API_KEY
+```
+
+Launch the python example script:
+
+```bash
+$ python test/test_api.py
+```
