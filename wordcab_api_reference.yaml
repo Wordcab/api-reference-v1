@@ -529,23 +529,23 @@ paths:
                     description: The user-specified tags used to filter the stats request.
                     items:
                       type: string
-                example:
-                  {
-                    "account_email": "hello@wordcab.com",
-                    "plan": "Metered",
-                    "monthly_request_limit": 10000,
-                    "request_count": 1000,
-                    "minutes_summarized": 1500,
-                    "transcripts_summarized": 850,
-                    "metered_charge": "$198.00",
-                    "min_created": "2021-01-01T00:00:00",
-                    "max_created": "2022-01-01T00:00:00",
-                    "tags": [
-                      "customer_42",
-                      "paid_users",
-                      "vip_users"
-                    ]
-                  }
+              example:
+                {
+                  "account_email": "hello@wordcab.com",
+                  "plan": "Metered",
+                  "monthly_request_limit": 10000,
+                  "request_count": 1000,
+                  "minutes_summarized": 1500,
+                  "transcripts_summarized": 850,
+                  "metered_charge": "$198.00",
+                  "min_created": "2021-01-01T00:00:00",
+                  "max_created": "2022-01-01T00:00:00",
+                  "tags": [
+                    "customer_42",
+                    "paid_users",
+                    "vip_users"
+                  ]
+                }
         '401':
           description: Unauthorized
           content:
@@ -725,10 +725,10 @@ paths:
                   job_name:
                     type: string
                     description: You can use the newly generated `job_name` to poll the **/jobs** endpoint.
-                example:
-                  {
-                    "job_name": "narrative_summary_UGWCThBPanz7k6IrTkGbg16PcJLbFee6"
-                  }
+              example:
+                {
+                  "job_name": "narrative_summary_UGWCThBPanz7k6IrTkGbg16PcJLbFee6"
+                }
         '400':
           description: Bad request
           content:
@@ -764,6 +764,7 @@ paths:
           in: query
           required: false
           description: >
+            **Default value:** `100`<br>
             The number of jobs you'd like to see per response. If there are more jobs than `page_size`, 
             you'll be provided a link to navigate to the next `page`.
           schema:
@@ -774,8 +775,9 @@ paths:
           in: query
           required: false
           description: >
-            The order of the returned jobs. Defaults to `-time_started` 
-            (descending, based on the time the job was created).
+            **Default value:** `-time_started` (descending order, based on the time the job was created)<br>
+            The list order of the jobs. You can use `+` or `-` to indicate ascending or descending order, respectively.
+          enum: [ display_name, job_name, job_status, source, summary_details, time_started, time_completed, transcript_id ]
           schema:
             type: string
             default: -time_started
@@ -809,12 +811,12 @@ paths:
                             * `Pending` - The job object has been created and is about to be queued
                             * `ItemQueued` - The job has been queued
                             * `Transcribing` - The input is being transcribed
-                            * `PreparingTranscript` - The transcript if being finalized
+                            * `PreparingTranscript` - The transcript is being finalized
                             * `TranscriptComplete` - The transcript is ready
                             * `Summarizing` - The transcript is being summarized
-                            * `PreparingSummary` - The summary if being finalized
+                            * `PreparingSummary` - The summary is being finalized
                             * `SummaryComplete` - The summary is ready
-                            * `Deleted` - The job and its associated transcript and summaries has been deleted
+                            * `Deleted` - The job and its associated transcript and summaries have been deleted
                             * `Error` - The job encountered an error
                           enum: [ Pending, ItemQueued, Transcribing, PreparingTranscript, TranscriptComplete, Summarizing,
                                   PreparingSummary, SummaryComplete, Deleted, Error ]
@@ -914,12 +916,12 @@ paths:
                       * `Pending` - The job object has been created and is about to be queued
                       * `ItemQueued` - The job has been queued
                       * `Transcribing` - The input is being transcribed
-                      * `PreparingTranscript` - The transcript if being finalized
+                      * `PreparingTranscript` - The transcript is being finalized
                       * `TranscriptComplete` - The transcript is ready
                       * `Summarizing` - The transcript is being summarized
-                      * `PreparingSummary` - The summary if being finalized
+                      * `PreparingSummary` - The summary is being finalized
                       * `SummaryComplete` - The summary is ready
-                      * `Deleted` - The job and its associated transcript and summaries has been deleted
+                      * `Deleted` - The job and its associated transcript and summaries have been deleted
                       * `Error` - The job encountered an error
                     enum: [Pending, ItemQueued, Transcribing, PreparingTranscript, TranscriptComplete, Summarizing,
                       PreparingSummary, SummaryComplete, Deleted, Error]
@@ -974,31 +976,31 @@ paths:
                     type: string
                     description: The `source` that was set during job creation.
                     enum: [generic, audio, wordcab_transcript, signed_url, assembly_ai, deepgram, otter, fireflies, sonix, descript]
-                example:
-                  {
-                    "job_status": "SummaryComplete",
-                    "job_name": "job_hDGRNL9yOf5RfpURCNLNJqhFrnBAtDc3",
-                    "transcript_id": "transcript_KU3IU70e4az3WiJhWsOQI7WPXTRweo8W",
-                    "display_name": "My Awesome Job",
-                    "time_started": "2023-01-01T12:13:14.156789Z",
-                    "settings": {
-                      "pipeline": "transcript,summarize",
-                      "split_long_utterances": true,
-                      "ephemeral_data": false,
-                      "only_api": true
-                    },
-                    "summary_details": {
-                      "summary_id": "narrative_summary_UGWCThBPanz7k6IrTkGbg16PcJLbFee6",
-                      "summary_type": "narrative",
-                      "summary_lens": "1,3,5"
-                    },
-                    "source": "generic",
-                    "tags": "customer_42,paid_users,vip_users",
-                    "metadata": {
-                      "uuid": "abc",
-                      "user_id": "123"
-                    }
+              example:
+                {
+                  "job_status": "SummaryComplete",
+                  "job_name": "job_hDGRNL9yOf5RfpURCNLNJqhFrnBAtDc3",
+                  "transcript_id": "transcript_KU3IU70e4az3WiJhWsOQI7WPXTRweo8W",
+                  "display_name": "My Awesome Job",
+                  "time_started": "2023-01-01T12:13:14.156789Z",
+                  "settings": {
+                    "pipeline": "transcript,summarize",
+                    "split_long_utterances": true,
+                    "ephemeral_data": false,
+                    "only_api": true
+                  },
+                  "summary_details": {
+                    "summary_id": "narrative_summary_UGWCThBPanz7k6IrTkGbg16PcJLbFee6",
+                    "summary_type": "narrative",
+                    "summary_lens": "1,3,5"
+                  },
+                  "source": "generic",
+                  "tags": "customer_42,paid_users,vip_users",
+                  "metadata": {
+                    "uuid": "abc",
+                    "user_id": "123"
                   }
+                }
         '400':
           description: Bad request
           content:
@@ -1039,10 +1041,10 @@ paths:
                   job_name:
                     type: string
                     description: The job id that was deleted.
-                example:
-                  {
-                    "job_name": "job_hDGRNL9yOf5RfpURCNLNJqhFrnBAtDc3",
-                  }
+              example:
+                {
+                  "job_name": "job_hDGRNL9yOf5RfpURCNLNJqhFrnBAtDc3",
+                }
         '400':
           description: Bad request
           content:
