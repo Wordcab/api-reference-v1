@@ -1195,7 +1195,7 @@ paths:
                       properties:
                         text:
                           type: string
-                          description: The utterance; the text of what the speaker said on the their turn.
+                          description: The utterance; the text of what the speaker said on their turn.
                         speaker:
                           type: string
                           description: >
@@ -1228,13 +1228,13 @@ paths:
                         start_index:
                           type: integer
                           description: >
-                            The start index of the `text`, with 0 being the start of the start of the transcript.
+                            The start index of the `text`, with 0 being the start of the transcript.
                             This is used in place of the `start_time` and `start_timestamps` when no timestamps 
                             were provided in the original transcript input.
                         end_index:
                           type: integer
                           description: >
-                            The end index of the `text`, with 0 being the start of the start of the transcript.
+                            The end index of the `text`, with 0 being the start of the transcript.
                             This is used in place of the `end_time` and `end_timestamps` when no timestamps 
                             were provided in the original transcript input.
                   speaker_map:
@@ -1249,40 +1249,40 @@ paths:
                           **SPEAKER [A-Z]** (for example, 'SPEAKER B'). You can use the `speaker_map` to quickly 
                           insert appropriate speaker labels into the transcript, and replace speaker labels in the 
                           associated summaries.
-                example:
-                  {
-                    "transcript_id": "transcript_KU3IU70e4az3WiJhWsOQI7WPXTRweo8W",
-                    "job_id_set": [
-                      "job_hDGRNL9yOf5RfpURCNLNJqhFrnBAtDc3",
-                      "job_ur3tlDQMBDqED2Vr7TK3a1oeWo39jj9f"
-                    ],
-                    "summary_id_set": [
-                      "narrative_summary_UGWCThBPanz7k6IrTkGbg16PcJLbFee6",
-                      "short_summary_CmUhlopIyLo3Y5L2BglboM1c6Jm20isP"
-                    ],
-                    "transcript": [
-                      {
-                        "text": "This is an example of a generic transcript.",
-                        "speaker": "A",
-                        "start_timestamp": 1000,
-                        "end_timestamp": 10000,
-                        "start_time": "00:00:01",
-                        "end_time":"00:00:10"
-                      },
-                      {
-                        "text": "Oh wow!",
-                        "speaker": "B",
-                        "start_timestamp": 11000,
-                        "end_timestamp": 14000,
-                        "start_time": "00:00:11",
-                        "end_time":"00:00:14"
-                      }
-                    ],
-                    "speaker_map": {
-                      "A": "Joe",
-                      "B": "Jill"
+              example:
+                {
+                  "transcript_id": "transcript_KU3IU70e4az3WiJhWsOQI7WPXTRweo8W",
+                  "job_id_set": [
+                    "job_hDGRNL9yOf5RfpURCNLNJqhFrnBAtDc3",
+                    "job_ur3tlDQMBDqED2Vr7TK3a1oeWo39jj9f"
+                  ],
+                  "summary_id_set": [
+                    "narrative_summary_UGWCThBPanz7k6IrTkGbg16PcJLbFee6",
+                    "short_summary_CmUhlopIyLo3Y5L2BglboM1c6Jm20isP"
+                  ],
+                  "transcript": [
+                    {
+                      "text": "This is an example of a generic transcript.",
+                      "speaker": "A",
+                      "start_timestamp": 1000,
+                      "end_timestamp": 10000,
+                      "start_time": "00:00:01",
+                      "end_time":"00:00:10"
+                    },
+                    {
+                      "text": "Oh wow!",
+                      "speaker": "B",
+                      "start_timestamp": 11000,
+                      "end_timestamp": 14000,
+                      "start_time": "00:00:11",
+                      "end_time":"00:00:14"
                     }
+                  ],
+                  "speaker_map": {
+                    "A": "Joe",
+                    "B": "Jill"
                   }
+                }
         '400':
           description: Bad request
           content:
@@ -1322,7 +1322,7 @@ paths:
                   description: >
                     The new speaker map you wish to set. Each letter `A` through `Z` is associated with a speaker
                     label. The new speaker map will propagate the new speaker labels to every summary associated
-                    with the transcript object. The speaker labels in each summary will reflect the new speaker map.
+                    with the transcript object. The speaker labels in each summary will reflect the new speaker map.<br>
                     ```
                     {
                       "speaker_map": {
@@ -1348,20 +1348,19 @@ paths:
                     description: The id of the transcript object.
                   speaker_map:
                     type: object
+                    description: The new speaker map that was set.
                     patternProperties:
                       '^[A-Z]$':
                         type: string
                         pattern: '^[A-Z]$'
-                        description: >
-                          The new speaker map that was set.
-                example:
-                  {
-                    "transcript_id": "transcript_KU3IU70e4az3WiJhWsOQI7WPXTRweo8W",
-                    "speaker_map": {
-                      "A": "Joe",
-                      "B": "Jill"
-                    }
+              example:
+                {
+                  "transcript_id": "transcript_KU3IU70e4az3WiJhWsOQI7WPXTRweo8W",
+                  "speaker_map": {
+                    "A": "Joe",
+                    "B": "Jill"
                   }
+                }
         '400':
           description: Bad request
           content:
