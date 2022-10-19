@@ -1387,6 +1387,7 @@ paths:
           in: query
           required: false
           description: >
+            **Default value:** `100`<br>
             The number of summaries you'd like to see per response. If there are more summaries than `page_size`, 
             you'll be provided a link to navigate to the next `page`.
           schema:
@@ -1422,12 +1423,12 @@ paths:
                             * `Pending` - The job object has been created and is about to be queued
                             * `ItemQueued` - The job has been queued
                             * `Transcribing` - The input is being transcribed
-                            * `PreparingTranscript` - The transcript if being finalized
+                            * `PreparingTranscript` - The transcript is being finalized
                             * `TranscriptComplete` - The transcript is ready
                             * `Summarizing` - The transcript is being summarized
-                            * `PreparingSummary` - The summary if being finalized
+                            * `PreparingSummary` - The summary is being finalized
                             * `SummaryComplete` - The summary is ready
-                            * `Deleted` - The job and its associated transcript and summaries has been deleted
+                            * `Deleted` - The job and its associated transcript and summaries have been deleted
                             * `Error` - The job encountered an error
                           enum: [ Pending, ItemQueued, Transcribing, PreparingTranscript, TranscriptComplete, Summarizing,
                                   PreparingSummary, SummaryComplete, Deleted, Error ]
