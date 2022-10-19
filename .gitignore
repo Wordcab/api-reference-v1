@@ -1,3 +1,4 @@
 redocly.yaml
 .*
 !/.gitignore
+!/.github
