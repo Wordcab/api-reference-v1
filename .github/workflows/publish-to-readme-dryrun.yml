@@ -10,6 +10,29 @@ jobs:
     steps:
       - name: Checkout this repository
         uses: actions/checkout@v3
+
+      - name: Install and build rdme deps
+        run: npm ci && npm run build
+
+      - name: Retrieve version values
+        id: rdme-version
+        run: ./bin/set-version-output
+
+      - name: Find and replace Node.js version placeholders
+        uses: jacobtomlinson/gha-find-replace@v2
+        with:
+          find: 'NODE_VERSION'
+          replace: ${{ steps.rdme-version.outputs.NODE_VERSION }}
+          regex: false
+          include: documentation/*
+
+      - name: Find and replace `rdme` version placeholders
+        uses: jacobtomlinson/gha-find-replace@v2
+        with:
+          find: 'RDME_VERSION'
+          replace: ${{ steps.rdme-version.outputs.RDME_VERSION }}
+          regex: false
+          include: documentation/*
       
       - name: Sync docs to ReadMe (dry run)
         uses: readmeio/rdme@main

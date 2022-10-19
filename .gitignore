@@ -1,4 +1,8 @@
 redocly.yaml
+
+# Node.js
+node_modules
+
 .*
 !/.gitignore
 !/.github
