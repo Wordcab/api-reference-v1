@@ -14,4 +14,4 @@ jobs:
       - name: Sync docs to ReadMe (dry run)
         uses: readmeio/rdme@main
         with:
-          rdme: openapi wordcab_api_reference.yaml --key=${{ secrets.README_API_KEY }} --id=${{ secrets.README_API_DEFINITION_ID }} --dryRun
+          rdme: openapi ./documentation/wordcab_api_reference.yaml --key=${{ secrets.README_API_KEY }} --id=${{ secrets.README_API_DEFINITION_ID }} --dryRun
