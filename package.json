@@ -3,6 +3,6 @@
     "rdme": "^7.5.0"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc"
   }
 }
