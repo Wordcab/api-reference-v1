@@ -2,10 +2,7 @@
 name: Publish to README
 
 # Execute this pipeline when a push is made to any branch
-on:
-  push:
-    tags:
-      - 'v*'
+on: push
   
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -25,6 +22,7 @@ jobs:
 
       # Publish the documentation to ReadMe
       - name: Sync docs to ReadMe
+        if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
         uses: readmeio/rdme@main
         with:
-          rdme: openapi ./documentation/wordcab_api_reference.yaml --key=${{ secrets.README_API_KEY }} --id=${{ secrets.README_API_DEFINITION_ID }} --version=${{ github.ref_name }}
+          rdme: openapi ./documentation/wordcab_api_reference.yaml --key=${{ secrets.README_API_KEY }} --id=${{ secrets.README_API_DEFINITION_ID }}
