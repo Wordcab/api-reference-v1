@@ -1533,7 +1533,7 @@ paths:
                       "start_timestamp": 17000,
                       "end_timestamp": 21000,
                       "start_time": "00:00:17",
-                      "end_time":"00:00:21"
+                      "end_time":"00:00:21",
                       "topic_change": 0,
                       "detected_emotion": "surprise"
                     }
