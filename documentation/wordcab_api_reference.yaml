@@ -436,6 +436,167 @@ components:
           description: An invalid Bearer Token or `apikey` parameter was entered.
       example:
         detail: Invalid token.
+    ExtractJob:
+      type: object
+      properties:
+        job_status:
+          type: string
+          description: |
+            The status of your job.
+            * `Pending` - The job object has been created and is about to be queued
+            * `ItemQueued` - The job has been queued
+            * `Transcribing` - The input is being transcribed
+            * `PreparingTranscript` - The transcript is being finalized
+            * `TranscriptComplete` - The transcript is ready
+            * `Summarizing` - The transcript is being summarized
+            * `PreparingSummary` - The summary is being finalized
+            * `SummaryComplete` - The summary is ready
+            * `Deleted` - The job and its associated transcript and summaries have been deleted
+            * `Error` - The job encountered an error
+          enum: [Pending, ItemQueued, Transcribing, PreparingTranscript, TranscriptComplete, Summarizing,
+            PreparingSummary, SummaryComplete, Deleted, Error]
+        job_name:
+          type: string
+          description: Your job's id - keep this handy!
+        transcript_id:
+          type: string
+          description: >
+            The `transcript_id` of the associated Wordcab transcript object. You can use a single 
+            `transcript_id` to generate multiple summaries or inspect the transcript itself with the 
+            **/transcripts** endpoint.
+        display_name:
+          type: string
+          description: The `display_name` that was initially set during job creation.
+        time_started:
+          type: string
+          description: The ISO 8601 timestamp for when the job was initiated.
+        settings:
+          type: object
+          description: >
+            The settings that were initially set during job creation. For detailed descriptions
+            of each, see the **/summarize** endpoint.
+          properties:
+            pipeline:
+              type: string
+            split_long_utterances:
+              type: boolean
+            ephemeral_data:
+              type: boolean
+            only_api:
+              type: boolean
+        summary_details:
+          type: object
+          description: >
+            Details about the summary object that was created when the job was initiated, including the 
+            `summary_id`, which you can use to retrieve the generated summary. For more detailed descriptions 
+            of the other details, please see the **/summarize** endpoint.
+          properties:
+            summary_id:
+              type: string
+            summary_type:
+              type: string
+              enum: [narrative, short]
+            summary_lens:
+              type: string
+              description: Only displayed if `summary_type` is `narrative`.
+        source:
+          type: string
+          description: The `source` that was set during job creation.
+          enum: [generic, audio, wordcab_transcript, signed_url, assembly_ai, deepgram, otter, fireflies, sonix, descript]
+    example:
+      {
+        "job_status": "SummaryComplete",
+        "job_name": "job_hDGRNL9yOf5RfpURCNLNJqhFrnBAtDc3",
+        "transcript_id": "transcript_KU3IU70e4az3WiJhWsOQI7WPXTRweo8W",
+        "display_name": "My Awesome Job",
+        "time_started": "2023-01-01T12:13:14.156789Z",
+        "settings": {
+          "pipeline": "transcript,summarize",
+          "split_long_utterances": true,
+          "ephemeral_data": false,
+          "only_api": true
+        },
+        "summary_details": {
+          "summary_id": "narrative_summary_UGWCThBPanz7k6IrTkGbg16PcJLbFee6",
+          "summary_type": "narrative",
+          "summary_lens": "1,3,5"
+        },
+        "source": "generic",
+        "tags": "customer_42,paid_users,vip_users",
+        "metadata": {
+          "uuid": "abc",
+          "user_id": "123"
+        }
+      }
+    SummarizeJob:
+      type: object
+      properties:
+        job_status:
+          type: string
+          description: |
+            The status of your job.
+            * `Pending` - The job object has been created and is about to be queued
+            * `ItemQueued` - The job has been queued
+            * `Extracting` - The extraction job is being processed
+            * `PreparingExtraction` - The extraction job is being finalized
+            * `ExtractionComplete` - The extraction job has been completed
+            * `Deleted` - The job and its associated transcript and summaries have been deleted
+            * `Error` - The job encountered an error
+          enum: [Pending, ItemQueued, Extracting, PreparingExtraction, ExtractionComplete, Deleted, Error]
+        job_name:
+          type: string
+          description: Your job's id - keep this handy!
+        transcript_id:
+          type: string
+          description: >
+            The `transcript_id` of the associated Wordcab transcript object. You can use a single 
+            `transcript_id` to generate multiple summaries or inspect the transcript itself with the 
+            **/transcripts** endpoint.
+        display_name:
+          type: string
+          description: The `display_name` that was initially set during job creation.
+        time_started:
+          type: string
+          description: The ISO 8601 timestamp for when the job was initiated.
+        settings:
+          type: object
+          description: >
+            The settings that were initially set during job creation. For detailed descriptions
+            of each, see the **/summarize** endpoint.
+          properties:
+            pipeline:
+              type: string
+            split_long_utterances:
+              type: boolean
+            ephemeral_data:
+              type: boolean
+            only_api:
+              type: boolean
+        source:
+          type: string
+          description: The `source` that was set during job creation.
+          enum: [generic, audio, wordcab_transcript, signed_url, assembly_ai, deepgram, otter, fireflies, sonix, descript]
+    example:
+      {
+        "job_status": "ExtractionComplete",
+        "job_name": "job_hDGRNL9yOf5RfpURCNLNJqhFrnBAtDc3",
+        "transcript_id": "generic_transcript_KU3IU70e4az3WiJhWsOQI7WPXTRweo8W",
+        "display_name": "my_data_extraction",
+        "time_started": "2022-10-21T13:28:46.819385Z",
+        "settings": {
+          "pipeline": "questions_answers,topic_segments,emotions,speaker_talk_ratios",
+          "split_long_utterances": false,
+          "ephemeral_data": false,
+          "only_api": false
+        },
+        "source": "generic",
+        "tags": "customer_42,paid_users,vip_users",
+        "metadata": {
+          "uuid": "abc",
+          "user_id": "123"
+        },
+        "time_completed": "2022-10-21T13:38:08.273653+00:00"
+      }
 paths:
   /me:
     get:
@@ -621,13 +782,13 @@ paths:
           example: questions_answers,topic_segments,emotions,speaker_talk_ratios
       requestBody:
         content:
-          multipart/form-data:
+          'multipart/form-data':
             schema:
               oneOf:
                 - $ref: "#/components/schemas/TranscriptFile"
                 - $ref: "#/components/schemas/AudioFile"
                 - $ref: "#/components/schemas/VTTFile"
-         application/json:
+         'application/json':
            schema:
              $ref: "#/components/schemas/jsonBody"
       responses:
@@ -1023,100 +1184,9 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  job_status:
-                    type: string
-                    description: |
-                      The status of your job.
-                      * `Pending` - The job object has been created and is about to be queued
-                      * `ItemQueued` - The job has been queued
-                      * `Transcribing` - The input is being transcribed
-                      * `PreparingTranscript` - The transcript is being finalized
-                      * `TranscriptComplete` - The transcript is ready
-                      * `Summarizing` - The transcript is being summarized
-                      * `PreparingSummary` - The summary is being finalized
-                      * `SummaryComplete` - The summary is ready
-                      * `Deleted` - The job and its associated transcript and summaries have been deleted
-                      * `Error` - The job encountered an error
-                    enum: [Pending, ItemQueued, Transcribing, PreparingTranscript, TranscriptComplete, Summarizing,
-                      PreparingSummary, SummaryComplete, Deleted, Error]
-                  job_name:
-                    type: string
-                    description: Your job's id - keep this handy!
-                  transcript_id:
-                    type: string
-                    description: >
-                      The `transcript_id` of the associated Wordcab transcript object. You can use a single 
-                      `transcript_id` to generate multiple summaries or inspect the transcript itself with the 
-                      **/transcripts** endpoint.
-                  display_name:
-                    type: string
-                    description: The `display_name` that was initially set during job creation.
-                  time_started:
-                    type: string
-                    description: The ISO 8601 timestamp for when the job was initiated.
-                  settings:
-                    type: object
-                    description: >
-                      The settings that were initially set during job creation. For detailed descriptions
-                      of each, see the **/summarize** endpoint.
-                    properties:
-                      pipeline:
-                        type: string
-                      split_long_utterances:
-                        type: boolean
-                      ephemeral_data:
-                        type: boolean
-                      only_api:
-                        type: boolean
-                  summary_details:
-                    type: object
-                    description: >
-                      Details about the summary object that was created when the job was initiated, including the 
-                      `summary_id`, which you can use to retrieve the generated summary. For more detailed descriptions 
-                      of the other details, please see the **/summarize** endpoint.
-                    properties:
-                      summary_id:
-                        type: string
-                      summary_type:
-                        type: string
-                        enum: [narrative, short]
-                      summary_lens:
-                        type: string
-                        description: Only displayed if `summary_type` is `narrative`.
-#                      summary_terms:
-#                        type: string
-#                        description: Only displayed if `summary_type` is `focused`.
-                  source:
-                    type: string
-                    description: The `source` that was set during job creation.
-                    enum: [generic, audio, wordcab_transcript, signed_url, assembly_ai, deepgram, otter, fireflies, sonix, descript]
-              example:
-                {
-                  "job_status": "SummaryComplete",
-                  "job_name": "job_hDGRNL9yOf5RfpURCNLNJqhFrnBAtDc3",
-                  "transcript_id": "transcript_KU3IU70e4az3WiJhWsOQI7WPXTRweo8W",
-                  "display_name": "My Awesome Job",
-                  "time_started": "2023-01-01T12:13:14.156789Z",
-                  "settings": {
-                    "pipeline": "transcript,summarize",
-                    "split_long_utterances": true,
-                    "ephemeral_data": false,
-                    "only_api": true
-                  },
-                  "summary_details": {
-                    "summary_id": "narrative_summary_UGWCThBPanz7k6IrTkGbg16PcJLbFee6",
-                    "summary_type": "narrative",
-                    "summary_lens": "1,3,5"
-                  },
-                  "source": "generic",
-                  "tags": "customer_42,paid_users,vip_users",
-                  "metadata": {
-                    "uuid": "abc",
-                    "user_id": "123"
-                  }
-                }
+                oneOf:
+                  - $ref: '#/components/schemas/ExtractJob'
+                  - $ref: '#/components/schemas/SummarizeJob'
         '400':
           description: Bad request
           content:
