@@ -604,7 +604,6 @@ paths:
           in: query
           required: false
           description: |
-            **Default value:** #TODO
             A human-readable name for your job. Not strictly required, but highly recommended.
           schema:
             type: string
