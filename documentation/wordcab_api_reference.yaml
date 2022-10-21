@@ -503,31 +503,31 @@ components:
           type: string
           description: The `source` that was set during job creation.
           enum: [generic, audio, wordcab_transcript, signed_url, assembly_ai, deepgram, otter, fireflies, sonix, descript]
-    example:
-      {
-        "job_status": "SummaryComplete",
-        "job_name": "job_hDGRNL9yOf5RfpURCNLNJqhFrnBAtDc3",
-        "transcript_id": "transcript_KU3IU70e4az3WiJhWsOQI7WPXTRweo8W",
-        "display_name": "My Awesome Job",
-        "time_started": "2023-01-01T12:13:14.156789Z",
-        "settings": {
-          "pipeline": "transcript,summarize",
-          "split_long_utterances": true,
-          "ephemeral_data": false,
-          "only_api": true
-        },
-        "summary_details": {
-          "summary_id": "narrative_summary_UGWCThBPanz7k6IrTkGbg16PcJLbFee6",
-          "summary_type": "narrative",
-          "summary_lens": "1,3,5"
-        },
-        "source": "generic",
-        "tags": "customer_42,paid_users,vip_users",
-        "metadata": {
-          "uuid": "abc",
-          "user_id": "123"
+      example:
+        {
+          "job_status": "SummaryComplete",
+          "job_name": "job_hDGRNL9yOf5RfpURCNLNJqhFrnBAtDc3",
+          "transcript_id": "transcript_KU3IU70e4az3WiJhWsOQI7WPXTRweo8W",
+          "display_name": "My Awesome Job",
+          "time_started": "2023-01-01T12:13:14.156789Z",
+          "settings": {
+            "pipeline": "transcript,summarize",
+            "split_long_utterances": true,
+            "ephemeral_data": false,
+            "only_api": true
+          },
+          "summary_details": {
+            "summary_id": "narrative_summary_UGWCThBPanz7k6IrTkGbg16PcJLbFee6",
+            "summary_type": "narrative",
+            "summary_lens": "1,3,5"
+          },
+          "source": "generic",
+          "tags": "customer_42,paid_users,vip_users",
+          "metadata": {
+            "uuid": "abc",
+            "user_id": "123"
+          }
         }
-      }
     SummarizeJob:
       type: object
       properties:
@@ -576,27 +576,27 @@ components:
           type: string
           description: The `source` that was set during job creation.
           enum: [generic, audio, wordcab_transcript, signed_url, assembly_ai, deepgram, otter, fireflies, sonix, descript]
-    example:
-      {
-        "job_status": "ExtractionComplete",
-        "job_name": "job_hDGRNL9yOf5RfpURCNLNJqhFrnBAtDc3",
-        "transcript_id": "generic_transcript_KU3IU70e4az3WiJhWsOQI7WPXTRweo8W",
-        "display_name": "my_data_extraction",
-        "time_started": "2022-10-21T13:28:46.819385Z",
-        "settings": {
-          "pipeline": "questions_answers,topic_segments,emotions,speaker_talk_ratios",
-          "split_long_utterances": false,
-          "ephemeral_data": false,
-          "only_api": false
-        },
-        "source": "generic",
-        "tags": "customer_42,paid_users,vip_users",
-        "metadata": {
-          "uuid": "abc",
-          "user_id": "123"
-        },
-        "time_completed": "2022-10-21T13:38:08.273653+00:00"
-      }
+      example:
+        {
+          "job_status": "ExtractionComplete",
+          "job_name": "job_hDGRNL9yOf5RfpURCNLNJqhFrnBAtDc3",
+          "transcript_id": "generic_transcript_KU3IU70e4az3WiJhWsOQI7WPXTRweo8W",
+          "display_name": "my_data_extraction",
+          "time_started": "2022-10-21T13:28:46.819385Z",
+          "settings": {
+            "pipeline": "questions_answers,topic_segments,emotions,speaker_talk_ratios",
+            "split_long_utterances": false,
+            "ephemeral_data": false,
+            "only_api": false
+          },
+          "source": "generic",
+          "tags": "customer_42,paid_users,vip_users",
+          "metadata": {
+            "uuid": "abc",
+            "user_id": "123"
+          },
+          "time_completed": "2022-10-21T13:38:08.273653+00:00"
+        }
 paths:
   /me:
     get:
