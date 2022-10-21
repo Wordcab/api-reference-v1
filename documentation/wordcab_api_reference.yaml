@@ -22,10 +22,11 @@ info:
     [this Svix guide](https://docs.svix.com/receiving/verifying-payloads/how) on verifying incoming webhooks in your backend. 
     ## Base URL
     `https://wordcab.com/api/v1`
-
 servers:
   - url: https://wordcab.com/api/v1
-
+security:
+  - bearerAuth: []
+  - apiKeyAuth: []
 components:
   securitySchemes:
     bearerAuth:
@@ -435,11 +436,6 @@ components:
           description: An invalid Bearer Token or `apikey` parameter was entered.
       example:
         detail: Invalid token.
-
-security:
-  - bearerAuth: []
-  - apiKeyAuth: []
-
 paths:
   /me:
     get:
@@ -548,13 +544,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvalidToken'
-  /summarize:
+  /extract:
     post:
       tags:
-        - Summarize
-      summary: Start Summary
+        - Extract
+      summary: Start Extract
       description: >
-        Initiate a summary job with an audio file, text transcript, or JSON object.
+        Initiate a new extract job with an audio file, text transcript, or JSON object.
+        The job will be processed asynchronously and the response will contain a `job_name`.
       parameters:
         - name: X-Wordcab-Metadata-<Key>
           in: header
@@ -581,7 +578,7 @@ paths:
           required: true
           description: |
             Declare the source of the data that you want to summarize. 
-            📝 Note that some sources have different parameter requirements.
+            _📝 Note that some sources have different parameter requirements._
             * `generic` - Generic-format .txt and JSON transcripts
             * `audio` - For uploaded audio files
             * `wordcab_transcript` - Summarize Wordcab transcripts using a `transcript_id`
@@ -607,7 +604,129 @@ paths:
             A human-readable name for your job. Not strictly required, but highly recommended.
           schema:
             type: string
-          example: My Awesome Job
+          example: my_extract_job
+        - name: pipeline
+          in: query
+          required: false
+          description: >
+            **Default value:** `questions_answers,topic_segments,emotions,speaker_talk_ratios`<br>
+            A comma-separated list of actions to take upon initiating the job. You can specify any combination of the following:
+            * `questions_answers` - Detect question-answer pairs throughout the transcript.
+            * `topic_segments` - Extract topic segments from the transcript
+            * `emotions` - Extract emotions from the transcript
+            * `speaker_talk_ratios` - Details of the amount of time each speaker spoke
+          schema:
+            type: string
+            default: questions_answers,topic_segments,emotions,speaker_talk_ratios
+          example: questions_answers,topic_segments,emotions,speaker_talk_ratios
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/TranscriptFile"
+                - $ref: "#/components/schemas/AudioFile"
+                - $ref: "#/components/schemas/VTTFile"
+         application/json:
+           schema:
+             $ref: "#/components/schemas/jsonBody"
+      responses:
+        '201':
+          description: Successfully created a job
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job_name:
+                    type: string
+                    description: You can use the newly generated `job_name` to poll the **/jobs** endpoint.
+              example:
+                {
+                  "job_name": "job_UGWCThBPanz7k6IrTkGbg16PcJLbFee6"
+                }
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/WordcabTranscriptWrongSource"
+                  - $ref: "#/components/schemas/WordcabTranscriptNoTranscriptId"
+                  - $ref: "#/components/schemas/TranscriptIdError"
+                  - $ref: "#/components/schemas/InvalidSummaryType"
+                  - $ref: "#/components/schemas/InvalidSummaryLengths"
+                  - $ref: "#/components/schemas/MissingTranscript"
+                  - $ref: "#/components/schemas/InvalidJSONTranscriptStructure"
+                  - $ref: "#/components/schemas/BlankTranscript"
+                  - $ref: "#/components/schemas/ShortTranscript"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidToken'
+  /summarize:
+    post:
+      tags:
+        - Summarize
+      summary: Start Summary
+      description: >
+        Initiate a new summary job with an audio file, text transcript, or JSON object. 
+        The job will be processed asynchronously and the response will contain a `job_name`.
+      parameters:
+        - name: X-Wordcab-Metadata-<Key>
+          in: header
+          required: false
+          description: >
+            A metadata object is composed of a key-value pair. To add metadata to your job, you must add 
+            `X-Wordcab-Metadata-<Key>` headers to your **/summarize** request, where `<Key>` is _a key of your choice_.<br>
+            This way a metadata object with the key-value pairs you initially set will be saved to your job object.
+            By convention, Wordcab will extract anything after `X-Wordcab-Metadata-` (in this case, `<Key>`), 
+            make the string lowercase, and then convert any dashes to underscores.<br>
+            For example, an `X-Wordcab-Metadata-UUID` key with a value of `"abc"`, and an `X-Wordcab-Metadata-User-ID` 
+            key with a value of `"123"` will result in the following metadata object when retrieving your job:
+            ```
+            "metadata": {
+                "uuid": "abc",
+                "user_id": "123"
+            }
+            ```
+          schema:
+            type: string
+          example: X-Wordcab-Metadata-UUID
+        - name: source
+          in: query
+          required: true
+          description: |
+            Declare the source of the data that you want to summarize. 
+            _📝 Note that some sources have different parameter requirements._
+            * `generic` - Generic-format .txt and JSON transcripts
+            * `audio` - For uploaded audio files
+            * `wordcab_transcript` - Summarize Wordcab transcripts using a `transcript_id`
+            * `signed_url` - _AWS_ or _GCP_ signed URLs
+            * `assembly_ai` - Use the JSON array from AssemblyAI's `utterances` object as input
+            * `deepgram` - Use the JSON array from Deepgram's `utterances` object as input
+            * `rev_ai` - Use the JSON array from Rev.ai's `monologues` object as input
+            * `vtt` - Either a .vtt file, or raw vtt text in the request body - Learn more about [proper vtt formatting](https://quuz.org/webvtt/). 
+            _Note that speaker labels are required._
+            * `otter` - Learn more about [Otter.ai transcript formatting](https://wordcab.com/blog/summarizing-your-otterai-transcripts-in-wordcab/)
+            * `fireflies` - Learn more about [Fireflies.ai transcript formatting](https://wordcab.com/blog/summarizing-your-firefliesai-transcripts-in-wordcab/)
+            * `sonix` - Learn more about [Sonix.ai transcript formatting](https://wordcab.com/blog/summarizing-your-sonixai-transcripts-in-wordcab/)
+            * `descript` - Learn more about [Descript transcript formatting](https://wordcab.com/blog/how-to-summarize-descript-transcripts-in-wordcab/)
+          schema:
+            type: string
+            default: generic
+            enum: [generic, audio, wordcab_transcript, signed_url, assembly_ai, deepgram, rev_ai, vtt, otter, fireflies, sonix, descript]
+          example: generic
+        - name: display_name
+          in: query
+          required: false
+          description: |
+            A human-readable name for your job. Not strictly required, but highly recommended.
+          schema:
+            type: string
+          example: my_summary_job
         - name: summary_type
           in: query
           required: true
@@ -628,7 +747,7 @@ paths:
             _Required when `summary_type` is set to `narrative`_<br>
             A comma-separated string of numbers `1` through `5`. `1` corresponds to the shortest
             summary length, and `5` to the longest.<br>
-            📝 Note that if you specify more than one number, you will receive multiple summaries.
+            _📝 Note that if you specify more than one number, you will receive multiple summaries._
           schema:
             type: string
             default: "3"
@@ -704,9 +823,9 @@ paths:
                 - $ref: "#/components/schemas/TranscriptFile"
                 - $ref: "#/components/schemas/AudioFile"
                 - $ref: "#/components/schemas/VTTFile"
-#          application/json:
-#            schema:
-#              $ref: "#/components/schemas/jsonBody"
+         application/json:
+           schema:
+             $ref: "#/components/schemas/jsonBody"
 #          text/plain:
 #            schema:
 #              $ref: "#/components/schemas/textBody"
@@ -1234,6 +1353,24 @@ paths:
                             The end index of the `text`, with 0 being the start of the transcript.
                             This is used in place of the `end_time` and `end_timestamps` when no timestamps 
                             were provided in the original transcript input.
+                        topic_change:
+                          type: integer
+                          description: >
+                            A value of 0 or 1, indicates the likelihood that the topic of the conversation
+                            changed on this turn.<br>
+                            * `0`: The topic did not change on this turn.<br>
+                            * `1`: The topic changed on this turn.
+                        detected_emotion:
+                          type: string
+                          description: >
+                            The detected emotion of the speaker on this turn. Possible values are:
+                            * `anger`
+                            * `disgust`
+                            * `fear`
+                            * `joy`
+                            * `neutral`
+                            * `sadness`
+                            * `surprise`
                   speaker_map:
                     type: object
                     patternProperties:
@@ -1246,6 +1383,48 @@ paths:
                           **SPEAKER [A-Z]** (for example, 'SPEAKER B'). You can use the `speaker_map` to quickly 
                           insert appropriate speaker labels into the transcript, and replace speaker labels in the 
                           associated summaries.
+                  questions_answers:
+                    type: array
+                    description: >
+                      A structured set of questions and associated answers, in the form of an array of objects. 
+                      Each object has the `question` and `answer` text, and the `question_speaker` and `answer_speaker`,
+                      which are represented by their assigned letter (from `A` through `Z`).
+                    items:
+                      type: object
+                      properties:
+                        answer:
+                          type: string
+                          description: The answer text.
+                        question:
+                          type: string
+                          description: The question text.
+                        answer_speaker:
+                          type: string
+                          description: >
+                            The assigned letter of the speaker who answered the question, from `A` through `Z`. This is 
+                            used as a key in the `speaker_map` object, with the value being the associated label.
+                        question_speaker:
+                          type: string
+                          description: >
+                            The assigned letter of the speaker who asked the question, from `A` through `Z`. This is 
+                            used as a key in the `speaker_map` object, with the value being the associated label.
+                  speaker_talk_ratios:
+                    type: array
+                    description: >
+                      A structured set of speaker talk ratios, in the form of an array of objects. Each object has the 
+                      `speaker` and `talk_ratio` values, which are represented by their assigned letter (from `A` through `Z`).
+                    items:
+                      type: object
+                      properties:
+                        speaker:
+                          type: string
+                          description: >
+                            The assigned letter of the speaker, from `A` through `Z`. This is used as a key in the 
+                            `speaker_map` object, with the value being the associated label.
+                        talk_ratio:
+                          type: number
+                          description: >
+                            The ratio of the total talk time of the speaker to the total talk time of all speakers in percent.
               example:
                 {
                   "transcript_id": "transcript_KU3IU70e4az3WiJhWsOQI7WPXTRweo8W",
@@ -1259,25 +1438,51 @@ paths:
                   ],
                   "transcript": [
                     {
-                      "text": "This is an example of a generic transcript.",
+                      "text": "What is this?",
                       "speaker": "A",
                       "start_timestamp": 1000,
-                      "end_timestamp": 10000,
+                      "end_timestamp": 5000,
                       "start_time": "00:00:01",
-                      "end_time":"00:00:10"
+                      "end_time":"00:00:05",
+                      "topic_change": 0,
+                      "detected_emotion": "surprise"
+                    },
+                    {
+                      "text": "This is an example of a generic transcript.",
+                      "speaker": "B",
+                      "start_timestamp": 6000,
+                      "end_timestamp": 16000,
+                      "start_time": "00:00:06",
+                      "end_time":"00:00:16",
+                      "topic_change": 0,
+                      "detected_emotion": "neutral"
                     },
                     {
                       "text": "Oh wow!",
-                      "speaker": "B",
-                      "start_timestamp": 11000,
-                      "end_timestamp": 14000,
-                      "start_time": "00:00:11",
-                      "end_time":"00:00:14"
+                      "speaker": "A",
+                      "start_timestamp": 17000,
+                      "end_timestamp": 21000,
+                      "start_time": "00:00:17",
+                      "end_time":"00:00:21"
+                      "topic_change": 0,
+                      "detected_emotion": "surprise"
                     }
                   ],
                   "speaker_map": {
                     "A": "Joe",
                     "B": "Jill"
+                  },
+                  "questions_answers": [
+                    {
+                      "question": "What is this?",
+                      "answer": "This is an example of a generic transcript.",
+                      "question_speaker": "A",
+                      "answer_speaker": "B"
+                    }
+                  ],
+                  "speaker_talk_ratios": {
+                    "A": "48.98%",
+                    "B": "51.02%"
                   }
                 }
         '400':
