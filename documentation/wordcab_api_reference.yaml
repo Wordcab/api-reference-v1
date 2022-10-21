@@ -316,20 +316,20 @@ components:
         error:
           type: string
           description: >
-            `summary_lens` should be a number from 1-5, or a comma-seperated 
+            `summary_lens` should be a number from 1-5, or a comma-separated 
             list of numbers 1-5 (ex. '1,3,5').
       example:
-        error: The 'summary_lens' parameter should be a number from 1-5, or a comma-seperated list of numbers 1-5 (ex. '1,3,5').
+        error: The 'summary_lens' parameter should be a number from 1-5, or a comma-separated list of numbers 1-5 (ex. '1,3,5').
     FocusedSummaryNoTerms:
       type: object
       properties:
         error:
           type: string
           description: >
-            You need to enter a comma-seperated list of one or more `summary_terms` in order 
+            You need to enter a comma-separated list of one or more `summary_terms` in order 
             to generate a focused summary.
       example:
-        error: You need to enter a comma-seperated list of one or more 'summary_terms' in order to generate a focused summary.
+        error: You need to enter a comma-separated list of one or more 'summary_terms' in order to generate a focused summary.
     MissingSignedURL:
       type: object
       properties:
@@ -456,7 +456,7 @@ paths:
             **Format:** [ISO 8601](https://www.w3.org/TR/NOTE-datetime) or [Unix timestamps](https://www.unixtimestamp.com/)<br>
             **Default Timezone**: UTC<br>
             This parameter allows setting the minimum limit of the specified date range.
-            If you don't specify a datetime, `min_created` will automatically be set to a month prior. 
+            If you don't specify a datetime, `min_created` will automatically be set to a month prior.<br>
             For example, if the current date is January 15, `min_created` will be set to December 15.
           schema:
             type: string
@@ -470,7 +470,7 @@ paths:
             **Format:** [ISO 8601](https://www.w3.org/TR/NOTE-datetime) or [Unix timestamps](https://www.unixtimestamp.com/)<br>
             **Default Timezone**: UTC<br>
             This parameter allows setting the maximum limit of the specified date range.
-            If you don't specify a datetime, `max_created` will automatically be set to a month after `min_created`. 
+            If you don't specify a datetime, `max_created` will automatically be set to a month after `min_created`.<br>
             For example, if the current `min_created` is December 15, `max_created` will be set to January 15.
           schema:
             type: string
@@ -540,11 +540,7 @@ paths:
                   "metered_charge": "$198.00",
                   "min_created": "2021-01-01T00:00:00",
                   "max_created": "2022-01-01T00:00:00",
-                  "tags": [
-                    "customer_42",
-                    "paid_users",
-                    "vip_users"
-                  ]
+                  "tags": ["customer_42", "paid_users", "vip_users"]
                 }
         '401':
           description: Unauthorized
@@ -584,7 +580,8 @@ paths:
           in: query
           required: true
           description: |
-            Declare the source of the data that you want to summarize. 📝 Note that some sources have different parameter requirements.
+            Declare the source of the data that you want to summarize. 
+            📝 Note that some sources have different parameter requirements.
             * `generic` - Generic-format .txt and JSON transcripts
             * `audio` - For uploaded audio files
             * `wordcab_transcript` - Summarize Wordcab transcripts using a `transcript_id`
@@ -593,7 +590,7 @@ paths:
             * `deepgram` - Use the JSON array from Deepgram's `utterances` object as input
             * `rev_ai` - Use the JSON array from Rev.ai's `monologues` object as input
             * `vtt` - Either a .vtt file, or raw vtt text in the request body - Learn more about [proper vtt formatting](https://quuz.org/webvtt/). 
-            📝 Note that speaker labels are required.
+            _Note that speaker labels are required._
             * `otter` - Learn more about [Otter.ai transcript formatting](https://wordcab.com/blog/summarizing-your-otterai-transcripts-in-wordcab/)
             * `fireflies` - Learn more about [Fireflies.ai transcript formatting](https://wordcab.com/blog/summarizing-your-firefliesai-transcripts-in-wordcab/)
             * `sonix` - Learn more about [Sonix.ai transcript formatting](https://wordcab.com/blog/summarizing-your-sonixai-transcripts-in-wordcab/)
@@ -607,7 +604,6 @@ paths:
           in: query
           required: false
           description: |
-            **Default value:** #TODO
             A human-readable name for your job. Not strictly required, but highly recommended.
           schema:
             type: string
@@ -776,8 +772,9 @@ paths:
           required: false
           description: >
             **Default value:** `-time_started` (descending order, based on the time the job was created)<br>
-            The list order of the jobs. You can use `+` or `-` to indicate ascending or descending order, respectively.
-          enum: [ display_name, job_name, job_status, source, summary_details, time_started, time_completed, transcript_id ]
+            The list order of the jobs. You can use `+` or `-` to indicate ascending or descending order, respectively.<br>
+            Can be `display_name`, `job_name`, `job_status`, `source`, `summary_details`, `time_started`, 
+            `time_completed` or `transcript_id`.
           schema:
             type: string
             default: -time_started

@@ -1,0 +1,25 @@
+# Publish the documentation to ReadMe
+name: Publish to README
+
+# Execute this pipeline when a push is made to any branch
+on: push
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout this repository
+        uses: actions/checkout@v3
+      
+      # Dry run to test everything is fine
+      - name: Sync docs to ReadMe (dry run)
+        uses: readmeio/rdme@main
+        with:
+          rdme: openapi ./documentation/wordcab_api_reference.yaml --key=${{ secrets.README_API_KEY }} --id=${{ secrets.README_API_DEFINITION_ID }} --dryRun
+
+      # Publish the documentation to ReadMe if push is on main branch
+      - name: Sync docs to ReadMe
+        if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
+        uses: readmeio/rdme@main
+        with:
+          rdme: openapi ./documentation/wordcab_api_reference.yaml --key=${{ secrets.README_API_KEY }} --id=${{ secrets.README_API_DEFINITION_ID }}
