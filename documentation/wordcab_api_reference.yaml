@@ -436,7 +436,7 @@ components:
           description: An invalid Bearer Token or `apikey` parameter was entered.
       example:
         detail: Invalid token.
-    ExtractJob:
+    SummarizeJob:
       type: object
       properties:
         job_status:
@@ -528,7 +528,7 @@ components:
             "user_id": "123"
           }
         }
-    SummarizeJob:
+    ExtractJob:
       type: object
       properties:
         job_status:
