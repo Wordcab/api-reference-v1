@@ -780,6 +780,48 @@ paths:
             type: string
             default: questions_answers,topic_segments,emotions,speaker_talk_ratios
           example: questions_answers,topic_segments,emotions,speaker_talk_ratios
+        - name: tags
+          in: query
+          required: false
+          description: >
+            A comma-separated string containing tags you'd like to attribute to your job. This is particularly helpful
+            when you want to filter your jobs by a specific tag.
+          schema:
+            type: string
+          example: "customer_42,paid_users,vip_users"
+        - name: transcript_id
+          in: query
+          required: false
+          description: >
+            _Required when `source` is set to `wordcab_transcript`._<br>
+            Represents the id of a processed Wordcab transcript.
+          schema:
+            type: string
+          example: transcript_KU3IU70e4az3WiJhWsOQI7WPXTRweo8W
+        - name: signed_url
+          in: query
+          required: false
+          description: >
+            _Required when `source` is set to `signed_url`._<br>
+            An _AWS_ or _GCP_ signed URL that points to an audio file.
+          schema:
+            type: string
+          example: "https://s3.us-east-2.amazonaws.com/example-bucket/sales-call.mp3?X-Amz-Security-Token=XYZ…"
+        - name: ephemeral_data
+          in: query
+          required: false
+          description: >
+            <span style="color:red;">Warning</span>: requires 
+            <a href="https://wordcab.com/account/webhook-portal/" target="_blank">webhooks to be enabled</a>.
+            If set to `true`, your webhooks will receive all processed data simultaneously instead of only a job reference.
+            Ephemeral data provides a convenient, automatic way of removing sensitive data from Wordcab servers.<br>
+            📝 Note that enabling `ephemeral_data` wipes all sensitive data tied to a particular job.
+            You will not be able to retrieve a finished job via polling, nor will you be able to reuse any 
+            `transcript_id` or `summary_id` tied to the removed job.
+          schema:
+            type: boolean
+            default: false
+          example: false
       requestBody:
         content:
           multipart/form-data:
