@@ -782,13 +782,13 @@ paths:
           example: questions_answers,topic_segments,emotions,speaker_talk_ratios
       requestBody:
         content:
-          'multipart/form-data':
+          multipart/form-data:
             schema:
               oneOf:
                 - $ref: "#/components/schemas/TranscriptFile"
                 - $ref: "#/components/schemas/AudioFile"
                 - $ref: "#/components/schemas/VTTFile"
-          'application/json':
+          application/json:
             schema:
               $ref: "#/components/schemas/jsonBody"
       responses:
@@ -978,13 +978,13 @@ paths:
           example: false
       requestBody:
         content:
-          'multipart/form-data':
+          multipart/form-data:
             schema:
               oneOf:
                 - $ref: "#/components/schemas/TranscriptFile"
                 - $ref: "#/components/schemas/AudioFile"
                 - $ref: "#/components/schemas/VTTFile"
-          'application/json':
+          application/json:
             schema:
               $ref: "#/components/schemas/jsonBody"
 #          text/plain:
