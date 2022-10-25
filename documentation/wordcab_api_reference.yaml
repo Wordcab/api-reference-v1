@@ -742,7 +742,7 @@ paths:
             _📝 Note that some sources have different parameter requirements._
             * `generic` - Generic-format .txt and JSON transcripts
             * `audio` - For uploaded audio files
-            * `wordcab_transcript` - Summarize Wordcab transcripts using a `transcript_id`
+            * `wordcab_transcript` - Extraction job with one Wordcab transcript using a `transcript_id`
             * `signed_url` - _AWS_ or _GCP_ signed URLs
             * `assembly_ai` - Use the JSON array from AssemblyAI's `utterances` object as input
             * `deepgram` - Use the JSON array from Deepgram's `utterances` object as input
@@ -906,7 +906,7 @@ paths:
             _📝 Note that some sources have different parameter requirements._
             * `generic` - Generic-format .txt and JSON transcripts
             * `audio` - For uploaded audio files
-            * `wordcab_transcript` - Summarize Wordcab transcripts using a `transcript_id`
+            * `wordcab_transcript` - Summarization job with one Wordcab transcript using a `transcript_id`
             * `signed_url` - _AWS_ or _GCP_ signed URLs
             * `assembly_ai` - Use the JSON array from AssemblyAI's `utterances` object as input
             * `deepgram` - Use the JSON array from Deepgram's `utterances` object as input
