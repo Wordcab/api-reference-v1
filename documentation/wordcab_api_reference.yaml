@@ -738,7 +738,7 @@ paths:
           in: query
           required: true
           description: |
-            Declare the source of the data that you want to summarize. 
+            Declare the source of the data for the Extraction job. 
             _📝 Note that some sources have different parameter requirements._
             * `generic` - Generic-format .txt and JSON transcripts
             * `audio` - For uploaded audio files
@@ -902,7 +902,7 @@ paths:
           in: query
           required: true
           description: |
-            Declare the source of the data that you want to summarize. 
+            Declare the source of the data for the Summarization job. 
             _📝 Note that some sources have different parameter requirements._
             * `generic` - Generic-format .txt and JSON transcripts
             * `audio` - For uploaded audio files
