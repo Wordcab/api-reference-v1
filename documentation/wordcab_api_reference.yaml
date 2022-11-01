@@ -719,7 +719,7 @@ paths:
           required: false
           description: >
             A metadata object is composed of a key-value pair. To add metadata to your job, you must add 
-            `X-Wordcab-Metadata-<Key>` headers to your **/summarize** request, where `<Key>` is _a key of your choice_.<br>
+            `X-Wordcab-Metadata-<Key>` headers to your **/extract** request, where `<Key>` is _a key of your choice_.<br>
             This way a metadata object with the key-value pairs you initially set will be saved to your job object.
             By convention, Wordcab will extract anything after `X-Wordcab-Metadata-` (in this case, `<Key>`), 
             make the string lowercase, and then convert any dashes to underscores.<br>
