@@ -938,10 +938,12 @@ paths:
             The type of summary you want to generate.
             * `narrative` - Wordcab's default summary type, which aims to produce a detailed, bullet-point style summary.
             * `reason_conclusion` - A "reason" summary describing the purpose of the call, and a "conclusion" summary describing the outcome.
+            * `conversational` - A summary that suits internal meetings and sales calls when you don't need an exact play-by-play of the events. Consider choosing `narrative` if you do.
+            * `no_speaker` - Similar to the `conversational` summary, without referencing any speakers and going straight to the important events in a conversation.
           schema:
             type: string
             default: narrative
-            enum: [ narrative, reason_conclusion ]
+            enum: [ narrative, reason_conclusion, conversational, no_speaker ]
           example: narrative
         - name: summary_lens
           in: query
