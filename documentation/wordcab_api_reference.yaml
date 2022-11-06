@@ -562,7 +562,7 @@ components:
           type: object
           description: >
             The settings that were initially set during job creation. For detailed descriptions
-            of each, see the **/summarize** endpoint.
+            of each, see the **/extract** endpoint.
           properties:
             pipeline:
               type: string
@@ -657,7 +657,7 @@ paths:
                     type: string
                     description: Your current subscription, free or paid plan.
                   monthly_request_limit:
-                    type: integer
+                    type: string
                     description: >
                       Your monthly request limit (contact info@wordcab.com to raise it).
                   request_count:
@@ -670,7 +670,7 @@ paths:
                     type: integer
                     description: The number of transcripts summarized during the specified date range.
                   metered_charge:
-                    type: integer
+                    type: string
                     description: >
                       The metered charge for the specified date range. This takes into account all successful requests.
                   min_created:
@@ -771,10 +771,10 @@ paths:
           required: false
           description: >
             **Default value:** `questions_answers,topic_segments,emotions,speaker_talk_ratios`<br>
-            A comma-separated list of actions to take upon initiating the job. You can specify any combination of the following:
-            * `questions_answers` - Detect question-answer pairs throughout the transcript.
-            * `topic_segments` - Extract topic segments from the transcript
-            * `emotions` - Extract emotions from the transcript
+            A comma-separated list of actions to take upon initiating the job. You can specify any combination of the following:<br>
+            * `questions_answers` - Detect question-answer pairs throughout the transcript.<br>
+            * `topic_segments` - Extract topic segments from the transcript<br>
+            * `emotions` - Extract emotions from the transcript<br>
             * `speaker_talk_ratios` - Details of the amount of time each speaker spoke
           schema:
             type: string
