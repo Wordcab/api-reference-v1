@@ -984,6 +984,17 @@ paths:
           schema:
             type: string
           example: "customer_42,paid_users,vip_users"
+        - name: source_lang
+          in: query
+          required: false
+          description: >
+            **Default value:** `en`<br>
+            Set the language of the input source.<br>
+            It can be `en`, `es`, `de[beta]`, `fr[beta]`, and `it[beta]`
+          schema:
+            type: string
+            default: en
+          example: en
         - name: split_long_utterances
           in: query
           required: false
