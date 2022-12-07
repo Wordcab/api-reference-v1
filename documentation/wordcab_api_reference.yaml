@@ -990,7 +990,7 @@ paths:
           description: >
             **Default value:** `en`<br>
             Set the language of the input source.<br>
-            It can be `en`, `es`, `de[beta]`, `fr[beta]`, and `it[beta]`
+            It can be `en`, `es`, `de`, `fr`, and `it`. Note that apart from `en` all languages are in beta phase.
           schema:
             type: string
             default: en
