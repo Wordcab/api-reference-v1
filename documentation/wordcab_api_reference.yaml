@@ -949,7 +949,7 @@ paths:
           in: query
           required: false
           description: >
-            _Required when `summary_type` is set to `narrative`_<br>
+            _Required when `summary_type` is set to `narrative`, `conversational` or `no_speaker`_<br>
             A comma-separated string of numbers `1` through `5`. `1` corresponds to the shortest
             summary length, and `5` to the longest.<br>
             _📝 Note that if you specify more than one number, you will receive multiple summaries._
