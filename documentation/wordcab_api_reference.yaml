@@ -990,11 +990,18 @@ paths:
           description: >
             **Default value:** `en`<br>
             Set the language of the input source.<br>
-            It can be `en`, `es`, `de`, `fr`, and `it`. Note that apart from `en` all languages are in beta phase.
+            It can be `en`, `es`, `de`, `fr`, `it` or `sv`. Note that apart from `en` all languages are in beta phase.
           schema:
             type: string
             default: en
           example: en
+        - name: target_lang
+          in: query
+          required: false
+          description: >
+            **Default value:** `en`<br>
+            Set the language for the resulting summary.<br>
+            It can be `en`, `es`, `de`, `fr`, `it` or `sv`. Note that apart from `en` all languages are in beta phase.
         - name: split_long_utterances
           in: query
           required: false
