@@ -917,6 +917,7 @@ paths:
             * `fireflies` - Learn more about [Fireflies.ai transcript formatting](https://wordcab.com/blog/summarizing-your-firefliesai-transcripts-in-wordcab/)
             * `sonix` - Learn more about [Sonix.ai transcript formatting](https://wordcab.com/blog/summarizing-your-sonixai-transcripts-in-wordcab/)
             * `descript` - Learn more about [Descript transcript formatting](https://wordcab.com/blog/how-to-summarize-descript-transcripts-in-wordcab/)
+            * `teams`- Use a .docx transcript from the Microsoft Teams application.
           schema:
             type: string
             default: generic
