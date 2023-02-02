@@ -1014,8 +1014,8 @@ paths:
             Splits up overly long speaker utterances. This results in generally more accurate but slightly longer summaries.
           schema:
             type: boolean
-            default: false
-          example: false
+            default: true
+          example: true
         - name: pipeline
           in: query
           required: false
