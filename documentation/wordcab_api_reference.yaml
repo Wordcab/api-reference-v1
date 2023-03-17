@@ -1000,6 +1000,11 @@ paths:
             * `keywords` - This item is an array of important words or phrases relevant to the document's content.
             * `next_steps` - This item is the recommended next action conveyed by one or more speakers.
             * `discussion_points` - This item is an array of notable topics discussed in the document.
+          schema:
+            type: string
+            default: None
+            enum: [ issue, purpose, keywords, next_steps, discussion_points ]
+          example: "issue,purpose,keywords,next_steps,discussion_points"
         - name: summary_lens
           in: query
           required: false
