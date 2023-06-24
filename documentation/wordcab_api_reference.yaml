@@ -870,9 +870,6 @@ paths:
                 - $ref: "#/components/schemas/AudioFile"
                 - $ref: "#/components/schemas/VTTFile"
                 - $ref: "#/components/schemas/jsonBody"
-          # application/json:
-          #   schema:
-          #     $ref: "#/components/schemas/jsonBody"
       responses:
         '201':
           description: Successfully created a job
@@ -1106,12 +1103,8 @@ paths:
                 - $ref: "#/components/schemas/TranscriptFile"
                 - $ref: "#/components/schemas/AudioFile"
                 - $ref: "#/components/schemas/VTTFile"
-          # application/json:
-          #   schema:
-          #     $ref: "#/components/schemas/jsonBody"
-#          text/plain:
-#            schema:
-#              $ref: "#/components/schemas/textBody"
+                - $ref: "#/components/schemas/jsonBody"
+                - $ref: "#/components/schemas/textBody"
       responses:
         '201':
           description: Successfully created a job
