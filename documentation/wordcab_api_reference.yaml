@@ -67,7 +67,7 @@ components:
         ```
         WEBVTT
 
-        00:11.000 --> 00:13.000 vertical:rl
+        00:11.000 --> 00:13.000
         <v Roger Bingham>We are in New York City
 
         00:13.000 --> 00:16.000
@@ -504,7 +504,7 @@ components:
               type: string
             summary_type:
               type: string
-              enum: [narrative, brief, conversational, no_speaker]
+              enum: [ narrative, conversational, no_speaker, brief ]
             summary_lens:
               type: array
         transcript_details:
@@ -992,20 +992,20 @@ paths:
           description: |
             **Default value:** `narrative`
             The type of summary you want to generate.
-            * `narrative` - Wordcab's default summary type, which aims to produce a detailed, bullet-point style summary.
+            * `narrative` - Wordcab's default summary type, a chronological play-by-play that aims to extract all relevant details. Best for customer support calls.
             * `conversational` - A summary that suits internal meetings and sales calls when you don't need an exact play-by-play of the events. Consider choosing `narrative` if you do.
             * `no_speaker` - Similar to the `conversational` summary, without referencing any speakers and going straight to the important events in a conversation.
-            * `brief` - A new summary type that provides a title and a single-sentence summary for each section of transcript. It's ideally used by pairing with `Context Items` to get a detailed overview of the transcript.
+            * `brief` - A summary type that provides a title and a single-sentence summary for each section of transcript. It's ideally used by pairing with `Context Items` to get a detailed overview of the transcript.
           schema:
             type: string
             default: narrative
-            enum: [ narrative, conversational, no_speaker ]
+            enum: [ narrative, conversational, no_speaker, brief ]
           example: narrative
         - name: context
           in: query
           required: false
           description: |
-            Context features provide additional context to Wordcab summaries, focusing on the most important aspects of the original transcript.
+            Context features provide additional context to Wordcab summaries, focusing on the most important aspects of the transcript.
             * `issue` - This item represents the main problem or concern that the section of transcripts aims to address.
             * `purpose` - This item describes the primary goal or objective of the transcript.
             * `keywords` - This item is an array of important words or phrases relevant to the document's content.
