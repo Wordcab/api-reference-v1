@@ -862,16 +862,21 @@ paths:
             default: false
           example: false
       requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              oneOf:
-                - $ref: "#/components/schemas/TranscriptFile"
-                - $ref: "#/components/schemas/AudioFile"
-                - $ref: "#/components/schemas/VTTFile"
-          application/json:
-           schema:
-             $ref: "#/components/schemas/jsonBody"
+        oneOf:
+          - $ref: "#/components/requestBodies/TranscriptFile"
+          - $ref: "#/components/requestBodies/AudioFile"
+          - $ref: "#/components/requestBodies/VTTFile"
+          - $ref: "#/components/requestBodies/jsonBody"
+#        content:
+#          multipart/form-data:
+#            schema:
+#              oneOf:
+#                - $ref: "#/components/schemas/TranscriptFile"
+#                - $ref: "#/components/schemas/AudioFile"
+#                - $ref: "#/components/schemas/VTTFile"
+#          application/json:
+#           schema:
+#             $ref: "#/components/schemas/jsonBody"
       responses:
         '201':
           description: Successfully created a job
