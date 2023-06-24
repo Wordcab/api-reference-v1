@@ -62,10 +62,9 @@ components:
         }
     textBody:
       type: string
-      description: >
-        If `source` is set to `vtt`, you can use raw vtt text in the request body. Make sure your vtt is 
-        formatted correctly (you can use [this validator](https://quuz.org/webvtt/)).
-        **Example**
+      description: |
+        If `source` is set to `vtt`, you can use raw vtt text in the request body. Make sure your vtt is formatted correctly (you can use [this validator](https://quuz.org/webvtt/)). **Example**:
+        ```
         WEBVTT
 
         00:11.000 --> 00:13.000 vertical:rl
@@ -82,6 +81,7 @@ components:
 
         00:20.000 --> 00:22.000
         <v Roger Bingham>Astrophysicist, Director of the Hayden Planetarium
+        ```
     BaseSummary:
       type: object
       description: Base Summary
