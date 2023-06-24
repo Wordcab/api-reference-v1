@@ -109,7 +109,7 @@ components:
         source:
           type: string
           description: The `source` that was set during the associated job's creation.
-          enum: [ generic, audio, wordcab_transcript, signed_url, vtt, rev_ai, assembly_ai, deepgram, otter, fireflies, sonix, descript ]
+          enum: [ generic, audio, wordcab_transcript, signed_url, vtt, rev_ai, assembly_ai, deepgram, otter, fireflies, sonix, descript, teams ]
     GenericSummary:
       allOf:
         - $ref: '#/components/schemas/BaseSummary'
@@ -510,7 +510,7 @@ components:
         source:
           type: string
           description: The `source` that was set during job creation.
-          enum: [ generic, audio, wordcab_transcript, signed_url, vtt, rev_ai, assembly_ai, deepgram, otter, fireflies, sonix, descript ]
+          enum: [ generic, audio, wordcab_transcript, signed_url, vtt, rev_ai, assembly_ai, deepgram, otter, fireflies, sonix, descript, teams ]
         source_lang:
             type: string
             description: The `source_lang` that was set during job creation.
@@ -537,7 +537,7 @@ components:
           "job_name": "job_hDGRNL9yOf5RfpURCNLNJqhFrnBAtDc3",
           "transcript_id": "transcript_KU3IU70e4az3WiJhWsOQI7WPXTRweo8W",
           "display_name": "My Awesome Job",
-          "time_started": "2023-01-01T12:13:14.156789Z",
+          "time_started": "2024-01-01T12:13:14.156789Z",
           "settings": {
             "pipeline": "transcript,summarize",
             "split_long_utterances": true,
@@ -550,6 +550,15 @@ components:
             "summary_lens": "1,3,5"
           },
           "source": "generic",
+          "source_lang": "en",
+          "target_lang": "en",
+          "transcript_details": {
+            "asr_engine": "asr_wordcab",
+            "alignment": true,
+            "diarization": true,
+            "dual_channel": false,
+            "word_timestamps": true
+          },
           "tags": "customer_42,paid_users,vip_users",
           "metadata": {
             "uuid": "abc",
@@ -603,7 +612,7 @@ components:
         source:
           type: string
           description: The `source` that was set during job creation.
-          enum: [ generic, audio, wordcab_transcript, signed_url, vtt, rev_ai, assembly_ai, deepgram, otter, fireflies, sonix, descript ]
+          enum: [ generic, audio, wordcab_transcript, signed_url, vtt, rev_ai, assembly_ai, deepgram, otter, fireflies, sonix, descript, teams ]
       example:
         {
           "job_status": "ExtractionComplete",
@@ -766,25 +775,27 @@ paths:
           in: query
           required: true
           description: |
-            Declare the source of the data for the Extraction job. 
+            Declare the source of the data for the Summarization job. 
             _📝 Note that some sources have different parameter requirements._
             * `generic` - Generic-format .txt and JSON transcripts
             * `audio` - For uploaded audio files
-            * `wordcab_transcript` - Extraction job with one Wordcab transcript using a `transcript_id`
+            * `wordcab_transcript` - Summarization job with one Wordcab transcript using a `transcript_id`
             * `signed_url` - _AWS_ or _GCP_ signed URLs
+            * `vtt` - A VTT file or string
+            * `rev_ai` - Use the JSON array from Rev.ai's `monologues` object as input
             * `assembly_ai` - Use the JSON array from AssemblyAI's `utterances` object as input
             * `deepgram` - Use the JSON array from Deepgram's `utterances` object as input
-            * `rev_ai` - Use the JSON array from Rev.ai's `monologues` object as input
-            * `vtt` - Either a .vtt file, or raw vtt text in the request body - Learn more about [proper vtt formatting](https://quuz.org/webvtt/). 
-            _Note that speaker labels are required._
+            * `vtt` - Either a .vtt file, or raw VTT text in the request body - Learn more about [proper vtt formatting](https://quuz.org/webvtt/). 
+            _Note that speaker labels are required for a VTT source._
             * `otter` - Learn more about [Otter.ai transcript formatting](https://wordcab.com/blog/summarizing-your-otterai-transcripts-in-wordcab/)
             * `fireflies` - Learn more about [Fireflies.ai transcript formatting](https://wordcab.com/blog/summarizing-your-firefliesai-transcripts-in-wordcab/)
             * `sonix` - Learn more about [Sonix.ai transcript formatting](https://wordcab.com/blog/summarizing-your-sonixai-transcripts-in-wordcab/)
             * `descript` - Learn more about [Descript transcript formatting](https://wordcab.com/blog/how-to-summarize-descript-transcripts-in-wordcab/)
+            * `teams`- Use a .docx transcript from the Microsoft Teams application.
           schema:
             type: string
             default: generic
-            enum: [ generic, audio, wordcab_transcript, signed_url, vtt, rev_ai, assembly_ai, deepgram, otter, fireflies, sonix, descript ]
+            enum: [ generic, audio, wordcab_transcript, signed_url, vtt, rev_ai, assembly_ai, deepgram, otter, fireflies, sonix, descript, teams ]
           example: generic
         - name: display_name
           in: query
@@ -858,9 +869,9 @@ paths:
                 - $ref: "#/components/schemas/TranscriptFile"
                 - $ref: "#/components/schemas/AudioFile"
                 - $ref: "#/components/schemas/VTTFile"
-          # application/json:
-          #   schema:
-          #     $ref: "#/components/schemas/jsonBody"
+          application/json:
+           schema:
+             $ref: "#/components/schemas/jsonBody"
       responses:
         '201':
           description: Successfully created a job
@@ -936,11 +947,12 @@ paths:
             * `audio` - For uploaded audio files
             * `wordcab_transcript` - Summarization job with one Wordcab transcript using a `transcript_id`
             * `signed_url` - _AWS_ or _GCP_ signed URLs
+            * `vtt` - A VTT file or string
+            * `rev_ai` - Use the JSON array from Rev.ai's `monologues` object as input
             * `assembly_ai` - Use the JSON array from AssemblyAI's `utterances` object as input
             * `deepgram` - Use the JSON array from Deepgram's `utterances` object as input
-            * `rev_ai` - Use the JSON array from Rev.ai's `monologues` object as input
-            * `vtt` - Either a .vtt file, or raw vtt text in the request body - Learn more about [proper vtt formatting](https://quuz.org/webvtt/). 
-            _Note that speaker labels are required._
+            * `vtt` - Either a .vtt file, or raw VTT text in the request body - Learn more about [proper vtt formatting](https://quuz.org/webvtt/). 
+            _Note that speaker labels are required for a VTT source._
             * `otter` - Learn more about [Otter.ai transcript formatting](https://wordcab.com/blog/summarizing-your-otterai-transcripts-in-wordcab/)
             * `fireflies` - Learn more about [Fireflies.ai transcript formatting](https://wordcab.com/blog/summarizing-your-firefliesai-transcripts-in-wordcab/)
             * `sonix` - Learn more about [Sonix.ai transcript formatting](https://wordcab.com/blog/summarizing-your-sonixai-transcripts-in-wordcab/)
@@ -949,7 +961,7 @@ paths:
           schema:
             type: string
             default: generic
-            enum: [ generic, audio, wordcab_transcript, signed_url, vtt, rev_ai, assembly_ai, deepgram, otter, fireflies, sonix, descript ]
+            enum: [ generic, audio, wordcab_transcript, signed_url, vtt, rev_ai, assembly_ai, deepgram, otter, fireflies, sonix, descript, teams ]
           example: generic
         - name: display_name
           in: query
@@ -1231,7 +1243,7 @@ paths:
                         source:
                           type: string
                           description: The `source` that was set during job creation.
-                          enum: [ generic, audio, wordcab_transcript, signed_url, vtt, rev_ai, assembly_ai, deepgram, otter, fireflies, sonix, descript ]
+                          enum: [ generic, audio, wordcab_transcript, signed_url, vtt, rev_ai, assembly_ai, deepgram, otter, fireflies, sonix, descript, teams ]
                         time_started:
                           type: string
                           description: The ISO 8601 timestamp for when the job was initiated.
@@ -1828,7 +1840,7 @@ paths:
                         source:
                           type: string
                           description: The `source` that was set during the associated job's creation.
-                          enum: [ generic, audio, wordcab_transcript, signed_url, vtt, rev_ai, assembly_ai, deepgram, otter, fireflies, sonix, descript ]
+                          enum: [ generic, audio, wordcab_transcript, signed_url, vtt, rev_ai, assembly_ai, deepgram, otter, fireflies, sonix, descript, teams ]
                         time_started:
                           type: string
                           description: The ISO 8601 timestamp for when the associated job was initiated.
