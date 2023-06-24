@@ -797,7 +797,7 @@ paths:
             * `generic` - Generic-format .txt and JSON transcripts
             * `audio` - For uploaded audio files
             * `wordcab_transcript` - Summarization job with one Wordcab transcript using a `transcript_id`
-            * `signed_url` - _AWS_ or _GCP_ signed URLs
+            * `signed_url` - _AWS_, _GCP_ or _Azure_ signed URL
             * `vtt` - A VTT file or string
             * `rev_ai` - Use the JSON array from Rev.ai's `monologues` object as input
             * `assembly_ai` - Use the JSON array from AssemblyAI's `utterances` object as input
@@ -859,7 +859,7 @@ paths:
           required: false
           description: >
             _Required when `source` is set to `signed_url`._<br>
-            An _AWS_ or _GCP_ signed URL that points to an audio file.
+            An _AWS_, _GCP_ or _Azure_ signed URL that points to an audio file.
           schema:
             type: string
           example: "https://s3.us-east-2.amazonaws.com/example-bucket/sales-call.mp3?X-Amz-Security-Token=XYZ…"
@@ -961,7 +961,7 @@ paths:
             * `generic` - Generic-format .txt and JSON transcripts
             * `audio` - For uploaded audio files
             * `wordcab_transcript` - Summarization job with one Wordcab transcript using a `transcript_id`
-            * `signed_url` - _AWS_ or _GCP_ signed URLs
+            * `signed_url` - _AWS_, _GCP_ or _Azure_ signed URL
             * `vtt` - A VTT file or string
             * `rev_ai` - Use the JSON array from Rev.ai's `monologues` object as input
             * `assembly_ai` - Use the JSON array from AssemblyAI's `utterances` object as input
@@ -1041,7 +1041,7 @@ paths:
           required: false
           description: >
             _Required when `source` is set to `signed_url`._<br>
-            An _AWS_ or _GCP_ signed URL that points to an audio file.
+            An _AWS_, _GCP_ or _Azure_ signed URL that points to an audio file.
           schema:
             type: string
           example: "https://s3.us-east-2.amazonaws.com/example-bucket/sales-call.mp3?X-Amz-Security-Token=XYZ…"
@@ -1060,7 +1060,7 @@ paths:
           description: >
             **Default value:** `en`<br>
             Set the language of the input source.<br>
-            It can be `en`, `es`, `de`, `fr`, `it`, `nl`, `pt` or `sv`. Note that apart from `en` all languages are in beta phase.
+            It can be `en`, `es`, `de`, `fr`, `it`, `nl`, `pt`, `sv` or `ru`. Note that apart from `en` all languages are in beta phase.
           schema:
             type: string
             default: en
@@ -1071,7 +1071,7 @@ paths:
           description: >
             **Default value:** `en`<br>
             Set the language for the resulting summary.<br>
-            It can be `en`, `es`, `de`, `fr`, `it`, `nl`, `pt` or `sv`. Note that apart from `en` all languages are in beta phase.
+            It can be `en`, `es`, `de`, `fr`, `it`, `nl`, `pt`, `sv` or `ru`. Note that apart from `en` all languages are in beta phase.
           schema:
             type: string
             default: en
@@ -1148,7 +1148,6 @@ paths:
                   - $ref: "#/components/schemas/TranscriptIdError"
                   - $ref: "#/components/schemas/InvalidSummaryType"
                   - $ref: "#/components/schemas/InvalidSummaryLengths"
-                  #- $ref: '#/components/schemas/FocusedSummaryNoTerms'
                   - $ref: "#/components/schemas/MissingSignedURL"
                   - $ref: "#/components/schemas/MissingTranscript"
                   - $ref: "#/components/schemas/InvalidJSONTranscriptStructure"
