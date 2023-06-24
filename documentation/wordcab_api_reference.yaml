@@ -4,20 +4,18 @@ info:
   title: Wordcab API
   description: >
     # Overview
-    Summarize business communications at scale with Wordcab's API. To access the reference for our legacy API,
-    [please head here](https://wordcab.com/api-reference/).
+    Transcribe, summarize, and extract insights from business communications at scale with Wordcab's API.
     ## API Key
-    To authenticate your request, either add `Authorization: Bearer <apikey>` to your header, or include the `apikey` 
-    as one of the query parameters. It's highly recommended you use the `Authorization` header. If you don’t have an 
-    API key, you can head over to the [Signup](https://wordcab.com/signup/) page to sign up for a Free Plan. Afterwards 
-    you’ll be redirected to your [Dashboard](https://wordcab.com/existing-summaries/). From there, head to your 
-    [Account](https://wordcab.com/account/details/) page, and click the API Key tab.
+    To authenticate your request, add `Authorization: Bearer <apikey>` to your header.
+    If you don’t have an API key, you can head over to the [Signup](https://wordcab.com/signup/) page to sign up for a 
+    Free Plan. Afterwards you’ll be redirected to your [Dashboard](https://wordcab.com/existing-summaries/). 
+    From there, head to your [Account](https://wordcab.com/account/details/) page, and click the API Key tab.
     ## Postman Collection
-    [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/11291760-6a87b562-531a-4394-a1b3-a5137066deaa?action=collection%2Ffork&collection-url=entityId%3D11291760-6a87b562-531a-4394-a1b3-a5137066deaa%26entityType%3Dcollection%26workspaceId%3D38faea26-9850-4351-be7e-0764297a460a)
+    Coming soon!
     ## Webhook Portal
     Wordcab partners with [Svix](https://svix.com) to provide users with a best-in-class webhook experience. You can 
     find a link to your Webhook Portal on your [Account](https://wordcab.com/account/webhook-portal/) page. 
-    With the Portal, you'll be able to register your webhook endpoints and get notified when certain events 
+    With your Webhook Portal, you'll be able to register your webhook endpoints and get notified when certain events 
     (like a summary being finished) occur. For best security practices, please see 
     [this Svix guide](https://docs.svix.com/receiving/verifying-payloads/how) on verifying incoming webhooks in your backend. 
     ## Base URL
@@ -44,7 +42,7 @@ components:
         transcript:
           type: array
           description: |
-            The format for a JSON transcript is an array of strings that each include a **speaker label**  followed by a **colon**, then a **space** and the **utterance** (what that speaker actually said). You can add an optional timestamp (formatted as in the example below) for every array item. `source` must be set to `generic`.
+            The format for a JSON transcript is an array of strings that each include a **speaker label**  followed by a **colon**, then a **space** and the **utterance** (what that speaker said). You can add an optional timestamp (formatted as in the example below) for every array item. `source` must be set to `generic`.
             ```
             {
               "transcript": [
@@ -111,8 +109,8 @@ components:
         source:
           type: string
           description: The `source` that was set during the associated job's creation.
-          enum: [ generic, audio, wordcab_transcript, signed_url, assembly_ai, deepgram, otter, fireflies, sonix, descript ]
-    NarrativeSummary:
+          enum: [ generic, audio, wordcab_transcript, signed_url, vtt, rev_ai, assembly_ai, deepgram, otter, fireflies, sonix, descript ]
+    GenericSummary:
       allOf:
         - $ref: '#/components/schemas/BaseSummary'
         - type: object
@@ -120,8 +118,8 @@ components:
             summary:
               type: object
               description: >
-                A narrative-style summary split into individual 'bullets', with each bullet having a corresponding 
-                transcript object.
+                A summary split into individual 'bullets', with each bullet having a corresponding transcript object,
+                and optionally a context object.
               properties:
                 '^[1-5]$':
                   type: object
@@ -129,7 +127,7 @@ components:
                   description: >
                     The key is a number from `1` through `5`, represented as a **string** (for example, '3').
                     Each number represents the level of detail of the corresponding summary. `1` Would be the 
-                    shortest summary, and `5` the longest. Each Narrative Summary has one or more summary objects,
+                    shortest summary, and `5` the longest. Each summary has one or more summary objects,
                     based on the `summary_lens` that were set during job creation. For example if `summary_lens`
                     was set to '1,3,5', there would be three summary objects in `summary`, with keys '1', '3', and '5'.
                   properties:
@@ -141,7 +139,7 @@ components:
                           summary:
                             type: string
                             description: >
-                              A summary 'bullet', part of one or more bullets composing the Narrative Summary for a 
+                              A summary 'bullet', part of one or more bullets composing the summary for a 
                               particular summary length.
                           context:
                             type: array
@@ -228,63 +226,13 @@ components:
                                     were provided in the original transcript input.
     ConversationalSummary:
       allOf:
-        - $ref: '#/components/schemas/NarrativeSummary'
+        - $ref: '#/components/schemas/GenericSummary'
     NoSpeakerSummary:
       allOf:
-        - $ref: '#/components/schemas/ConversationalSummary'
+        - $ref: '#/components/schemas/GenericSummary'
     BriefSummary:
       allOf:
-        - $ref: '#/components/schemas/BaseSummary'
-        - type: object
-          properties:
-            summary:
-              type: object
-              description: >
-                A brief-style summary split into individual 'bullets', with each bullet having a corresponding 
-                transcript object.
-              properties:
-                '^[1-5]$':
-                  type: object
-                  pattern: '^[1-5]$'
-                  description: >
-                    The key is a number from `1` through `5`, represented as a **string** (for example, '3').
-                    Each number represents the level of detail of the corresponding summary. `1` Would be the 
-                    shortest summary, and `5` the longest. Each Brief Summary has one or more summary objects,
-                    based on the `summary_lens` that were set during job creation. For example if `summary_lens`
-                    was set to '1,3,5', there would be three summary objects in `summary`, with keys '1', '3', and '5'.
-                  properties:
-                    structured_summary:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          summary:
-                            type: array
-                            description: >
-                              An array containing the summary `title` and `brief_summary` for the summary 'bullet'.
-                          context:
-                            type: array
-                            description: >
-                              An array of context items for the summary 'bullet'. Each context item is an object with a
-                              key and value. Can have any number of context items including: `issue`, `purpose`,
-                              `keywords`, `next_steps` and `discussion_points`.
-                          start_timestamp:
-                            type: integer
-                            description: >
-                              The timestamp of the moment the summary began, in **milliseconds**, with 0 being the start
-                              of the conversation. Only present if timestamps were included in the transcript that was
-                              used for the job, or if the job input was an audio file.
-                          end_timestamp:
-                            type: integer
-                            description: >
-                              The timestamp of the moment the summary ended, in **milliseconds**, with 0 being the start
-                              of the conversation. Only present if timestamps were included in the transcript that was
-                              used for the associated job, or if the job input was an audio file.
-                          start_time:
-                            type: string
-                            description: >
-                              The start time of the summary, in human-readable format: **00:01:23**. Only present if 
-                              timestamps were included
+        - $ref: '#/components/schemas/GenericSummary'
     TranscriptFile:
       type: object
       properties:
@@ -472,7 +420,7 @@ components:
       properties:
         detail:
           type: string
-          description: An invalid Bearer Token or `apikey` parameter was entered.
+          description: An invalid Bearer Token was entered.
       example:
         detail: Invalid token.
     SummarizeJob:
@@ -526,27 +474,63 @@ components:
         summary_details:
           type: object
           description: >
-            Details about the summary object that was created when the job was initiated, including the 
+            Details about the summary object that were created when the job was initiated, including the 
             `summary_id`, which you can use to retrieve the generated summary. For more detailed descriptions 
             of the other details, please see the **/summarize** endpoint.
           properties:
-            context:
+            summary_context:
               type: object
               description: >
-                A dictionnary with the context items requested for the summary.
-                Can have the following keys: `issue`, `purpose`, `keywords`, `discussion_points` and `next_steps`
+                A dictionary with the context items requested for the summary.
+                Can have the following keys: `issue`, `purpose`, `keywords`, `discussion_points` and `next_steps`.
             summary_id:
               type: string
             summary_type:
               type: string
               enum: [narrative, brief, conversational, no_speaker]
             summary_lens:
+              type: array
+        transcript_details:
+          type: object
+          description: >
+            Details about the transcript object that were created when the job was initiated. For more detailed descriptions 
+            of the other details, please see the **/transcribe** endpoint.
+          properties:
+            asr_engine:
               type: string
-              description: Can be between 1 and 5.
+              enum: [ asr_wordcab ]
+            alignment:
+              type: boolean
+            diarization:
+              type: boolean
+            dual_channel:
+              type: boolean
+            word_timestamps:
+              type: boolean
         source:
           type: string
           description: The `source` that was set during job creation.
-          enum: [generic, audio, wordcab_transcript, signed_url, assembly_ai, deepgram, otter, fireflies, sonix, descript]
+          enum: [ generic, audio, wordcab_transcript, signed_url, vtt, rev_ai, assembly_ai, deepgram, otter, fireflies, sonix, descript ]
+        source_lang:
+            type: string
+            description: The `source_lang` that was set during job creation.
+            enum: [ en, es, fr, de, it, pt, sv, nl, ru ]
+        target_lang:
+          type: string
+          description: The `target_lang` that was set during job creation.
+          enum: [ en, es, fr, de, it, pt, sv, nl, ru ]
+        metadata:
+          type: object
+          description: >
+            The `metadata` that was set during job creation. This is a dictionary of key-value pairs that can be used to store
+            any additional information you'd like to associate with the job.
+        tags:
+          type: array
+          description: >
+            The `tags` that were set during job creation. These are strings that can be used to categorize your jobs.
+        time_completed:
+          type: string
+          description: The ISO 8601 timestamp for when the job was completed.
       example:
         {
           "job_status": "SummaryComplete",
@@ -619,7 +603,7 @@ components:
         source:
           type: string
           description: The `source` that was set during job creation.
-          enum: [generic, audio, wordcab_transcript, signed_url, assembly_ai, deepgram, otter, fireflies, sonix, descript]
+          enum: [ generic, audio, wordcab_transcript, signed_url, vtt, rev_ai, assembly_ai, deepgram, otter, fireflies, sonix, descript ]
       example:
         {
           "job_status": "ExtractionComplete",
@@ -800,7 +784,7 @@ paths:
           schema:
             type: string
             default: generic
-            enum: [generic, audio, wordcab_transcript, signed_url, assembly_ai, deepgram, rev_ai, vtt, otter, fireflies, sonix, descript]
+            enum: [ generic, audio, wordcab_transcript, signed_url, vtt, rev_ai, assembly_ai, deepgram, otter, fireflies, sonix, descript ]
           example: generic
         - name: display_name
           in: query
@@ -965,7 +949,7 @@ paths:
           schema:
             type: string
             default: generic
-            enum: [generic, audio, wordcab_transcript, signed_url, assembly_ai, deepgram, rev_ai, vtt, otter, fireflies, sonix, descript]
+            enum: [ generic, audio, wordcab_transcript, signed_url, vtt, rev_ai, assembly_ai, deepgram, otter, fireflies, sonix, descript ]
           example: generic
         - name: display_name
           in: query
@@ -1247,7 +1231,7 @@ paths:
                         source:
                           type: string
                           description: The `source` that was set during job creation.
-                          enum: [ generic, audio, wordcab_transcript, signed_url, assembly_ai, deepgram, otter, fireflies, sonix, descript ]
+                          enum: [ generic, audio, wordcab_transcript, signed_url, vtt, rev_ai, assembly_ai, deepgram, otter, fireflies, sonix, descript ]
                         time_started:
                           type: string
                           description: The ISO 8601 timestamp for when the job was initiated.
@@ -1844,7 +1828,7 @@ paths:
                         source:
                           type: string
                           description: The `source` that was set during the associated job's creation.
-                          enum: [ generic, audio, wordcab_transcript, signed_url, assembly_ai, deepgram, otter, fireflies, sonix, descript ]
+                          enum: [ generic, audio, wordcab_transcript, signed_url, vtt, rev_ai, assembly_ai, deepgram, otter, fireflies, sonix, descript ]
                         time_started:
                           type: string
                           description: The ISO 8601 timestamp for when the associated job was initiated.
@@ -1898,12 +1882,12 @@ paths:
                 discriminator:
                   propertyName: summary_type
                   mapping:
-                    narrative: '#/components/schemas/NarrativeSummary'
+                    narrative: '#/components/schemas/GenericSummary'
                     conversational: '#/components/schemas/ConversationalSummary'
                     no_speaker: '#/components/schemas/NoSpeakerSummary'
                     brief: '#/components/schemas/BriefSummary'
                 anyOf:
-                  - $ref: '#/components/schemas/NarrativeSummary'
+                  - $ref: '#/components/schemas/GenericSummary'
                   - $ref: '#/components/schemas/ConversationalSummary'
                   - $ref: '#/components/schemas/NoSpeakerSummary'
                   - $ref: '#/components/schemas/BriefSummary'
