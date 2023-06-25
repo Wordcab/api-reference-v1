@@ -1188,7 +1188,7 @@ paths:
             * `discussion_points` - This item is an array of notable topics discussed in the document.
           schema:
             type: string
-            default: None
+            default: null
             enum: [ issue, purpose, keywords, next_steps, discussion_points ]
           example: "issue,purpose,keywords,next_steps,discussion_points"
         - name: summary_lens
