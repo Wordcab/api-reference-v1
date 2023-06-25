@@ -970,7 +970,44 @@ paths:
             In this case, this parameter is **required**. Specify a `url_type` and include the actual `url`
             for this parameter.
           schema:
-            try: string
+            type: string
+          example: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        - name: source_lang
+          required: false
+          description: >
+            **Default behaviour:** Automatically detect language. _Not recommended_.<br>
+            Set the language of the input source. This is recommended and results in higher quality transcripts.<br>
+            Wordcab supports **57 languages** for transcription, each denoted by a two-letter ISO 639-1 code.
+            Your preferred languages are likely supported.
+          schema:
+            type: string
+            default: en
+          example: en
+        - name: alignment
+          required: false
+          description: >
+            A post-processing technique that performs a pass over the transcripts and attempts to correct any misaligned
+            words. Highly recommended.
+          schema:
+            type: boolean
+            default: true
+        - name: diarization
+          required: false
+          description: >
+            Whether to auto-detect speakers and split the transcript by each speaker's utterance.
+          schema:
+            type: boolean
+            default: true
+        - name: dual_channel
+          required: false
+          description: >
+            If you're sending a dual-channel audio file, it will be split into two, transcribed, and recombined into a 
+            single transcript. This results in accurate diarization, and thus the `diarization` parameter will be
+            ignored. If the audio sent is mono-channel, it will instead go through the standard flow, and `diarization`
+            will be used.
+          schema:
+            type: boolean
+            default: false
         - name: tags
           in: query
           required: false
