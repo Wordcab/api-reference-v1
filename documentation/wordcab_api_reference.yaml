@@ -1640,6 +1640,26 @@ paths:
       summary: Retrieve Transcript
       description: Retrieve a transcript using the `transcript_id` generated during job creation.
       parameters:
+        - name: as_vtt
+          in: query
+          required: false
+          description: >
+            If `true`, the transcript will be returned as a VTT string. If `false`, the transcript will be returned
+            as a JSON object.
+          schema:
+            type: boolean
+            default: false
+          example: false
+        - name: as_srt
+          in: query
+          required: false
+          description: >
+            If `true`, the transcript will be returned as a SRT string. If `false`, the transcript will be returned
+            as a JSON object.
+          schema:
+              type: boolean
+              default: false
+          example: false
         - name: transcript_id
           in: path
           required: true
