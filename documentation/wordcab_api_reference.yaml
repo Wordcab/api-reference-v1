@@ -271,6 +271,15 @@ components:
             `source` must be set to `audio`.
           type: string
           format: binary
+    TranscribeAudioFile:
+      type: object
+      properties:
+        file:
+          description: >
+            Supported audio file formats include **flac**, **m4a**, **mp3**, **mpga**, **ogg**, and **wav**.
+            `source` must be set to `audio`.
+          type: string
+          format: binary
     VTTFile:
       type: object
       properties:
@@ -953,6 +962,14 @@ paths:
           schema:
             type: string
           example: X-Wordcab-Metadata-UUID
+        - name: display_name
+          in: query
+          required: false
+          description: |
+            A human-readable name for your job. Not strictly required, but highly recommended.
+          schema:
+            type: string
+          example: my_transcription_job
         - name: url_type
           required: false
           description: >
@@ -991,6 +1008,7 @@ paths:
           schema:
             type: boolean
             default: true
+          example: true
         - name: diarization
           required: false
           description: >
@@ -998,6 +1016,7 @@ paths:
           schema:
             type: boolean
             default: true
+          example: true
         - name: dual_channel
           required: false
           description: >
@@ -1008,6 +1027,32 @@ paths:
           schema:
             type: boolean
             default: false
+          example: false
+        - name: duration
+          required: false
+          description: >
+            Only used if setting the `url_type` parameter to `m3u8`. If this isn't set, up to 10800 seconds will be 
+            transcribed from the m3u8 URL. If a duration is set, only that many seconds will be transcribed from the 
+            m3u8 URL.
+          schema:
+            type: integer
+            default: 10800
+          example: 60
+        - name: ephemeral_data
+          in: query
+          required: false
+          description: >
+            <span style="color:red;">Warning</span>: requires 
+            <a href="https://wordcab.com/account/webhook-portal/" target="_blank">webhooks to be enabled</a>.
+            If set to `true`, your webhooks will receive all processed data simultaneously instead of only a job reference.
+            Ephemeral data provides a convenient, automatic way of removing sensitive data from Wordcab servers.<br>
+            📝 Note that enabling `ephemeral_data` wipes all sensitive data tied to a particular job.
+            You will not be able to retrieve a finished job via polling, nor will you be able to reuse any 
+            `transcript_id` or `summary_id` tied to the removed job.
+          schema:
+            type: boolean
+            default: false
+          example: false
         - name: tags
           in: query
           required: false
@@ -1017,6 +1062,34 @@ paths:
           schema:
             type: string
           example: "customer_42,paid_users,vip_users"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/TranscribeAudioFile"
+      responses:
+        '201':
+          description: Successfully created a job
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job_name:
+                    type: string
+                    description: You can use the newly generated `job_name` to poll the **/jobs** endpoint, and a `transcript_id` to fetch the transcript object.
+              example:
+                {
+                  "job_name": "narrative_summary_UGWCThBPanz7k6IrTkGbg16PcJLbFee6",
+                  "transcript_id": "transcript_KU3IU70e4az3WiJhWsOQI7WPXTRweo8W"
+                }
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidToken'
 
   /summarize:
     post:
