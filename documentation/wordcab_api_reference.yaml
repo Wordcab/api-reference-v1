@@ -971,6 +971,7 @@ paths:
             type: string
           example: my_transcription_job
         - name: url_type
+          in: query
           required: false
           description: >
             If you're not uploading an audio file, you can send either a signed URL, YouTube URL or m3u8 URL.
@@ -981,6 +982,7 @@ paths:
             enum: [ audio_url, youtube, m3u8 ]
           example: "youtube"
         - name: url
+          in: query
           required: false
           description: >
             If you're not uploading an audio file, you can send either a signed URL, YouTube URL or m3u8 URL.
@@ -990,6 +992,7 @@ paths:
             type: string
           example: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
         - name: source_lang
+          in: query
           required: false
           description: >
             **Default behaviour:** Automatically detect language. _Not recommended_.<br>
@@ -1001,6 +1004,7 @@ paths:
             default: en
           example: en
         - name: alignment
+          in: query
           required: false
           description: >
             A post-processing technique that performs a pass over the transcripts and attempts to correct any misaligned
@@ -1010,6 +1014,7 @@ paths:
             default: true
           example: true
         - name: diarization
+          in: query
           required: false
           description: >
             Whether to auto-detect speakers and split the transcript by each speaker's utterance.
@@ -1018,6 +1023,7 @@ paths:
             default: true
           example: true
         - name: dual_channel
+          in: query
           required: false
           description: >
             If you're sending a dual-channel audio file, it will be split into two, transcribed, and recombined into a 
@@ -1029,6 +1035,7 @@ paths:
             default: false
           example: false
         - name: duration
+          in: query
           required: false
           description: >
             Only used if setting the `url_type` parameter to `m3u8`. If this isn't set, up to 10800 seconds will be 
