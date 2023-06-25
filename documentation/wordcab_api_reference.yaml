@@ -923,6 +923,64 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvalidToken'
+
+  /transcribe:
+    post:
+      tags:
+        - Transcribe
+      summary: Start Transcription
+      description: >
+          Initiate a new transcription job with an audio file, signed URL, YouTube URL, or m3u8 URL. 
+          The job will be processed asynchronously and the response will contain a `job_name`.
+      parameters:
+        - name: X-Wordcab-Metadata-<Key>
+          in: header
+          required: false
+          description: >
+            A metadata object is composed of a key-value pair. To add metadata to your job, you must add 
+            `X-Wordcab-Metadata-<Key>` headers to your **/summarize** request, where `<Key>` is _a key of your choice_.<br>
+            This way a metadata object with the key-value pairs you initially set will be saved to your job object.
+            By convention, Wordcab will extract anything after `X-Wordcab-Metadata-` (in this case, `<Key>`), 
+            make the string lowercase, and then convert any dashes to underscores.<br>
+            For example, an `X-Wordcab-Metadata-UUID` key with a value of `"abc"`, and an `X-Wordcab-Metadata-User-ID` 
+            key with a value of `"123"` will result in the following metadata object when retrieving your job:
+            ```
+            "metadata": {
+                "uuid": "abc",
+                "user_id": "123"
+            }
+            ```
+          schema:
+            type: string
+          example: X-Wordcab-Metadata-UUID
+        - name: url_type
+          required: false
+          description: >
+            If you're not uploading an audio file, you can send either a signed URL, YouTube URL or m3u8 URL.
+            In this case, this parameter is **required**. Specify a `url_type` from one of the following:
+            `audio_url`, `youtube`, `m3u8`, and include the actual URL in the `url` parameter.
+          schema:
+            type: string
+            enum: [ audio_url, youtube, m3u8 ]
+          example: "youtube"
+        - name: url
+          required: false
+          description: >
+            If you're not uploading an audio file, you can send either a signed URL, YouTube URL or m3u8 URL.
+            In this case, this parameter is **required**. Specify a `url_type` and include the actual `url`
+            for this parameter.
+          schema:
+            try: string
+        - name: tags
+          in: query
+          required: false
+          description: >
+            A comma-separated string consisting of user-defined `tags`. Wordcab will filter stats to only account for 
+            the specified tags.
+          schema:
+            type: string
+          example: "customer_42,paid_users,vip_users"
+
   /summarize:
     post:
       tags:
