@@ -538,13 +538,13 @@ components:
           description: The `source` that was set during job creation.
           enum: [ generic, audio, wordcab_transcript, signed_url, vtt, rev_ai, assembly_ai, deepgram, otter, fireflies, sonix, descript, teams ]
         source_lang:
-            type: string
-            description: The `source_lang` that was set during job creation.
-            enum: [ en, es, fr, de, it, pt, sv, nl, ru ]
+          type: string
+          description: The `source_lang` that was set during job creation.
+          enum: [ en, es, fr, de, it, pt, sv, nl, da, no, ar, ru ]
         target_lang:
           type: string
           description: The `target_lang` that was set during job creation.
-          enum: [ en, es, fr, de, it, pt, sv, nl, ru ]
+          enum: [ en, es, fr, de, it, pt, sv, nl, da, no, ar, ru ]
         metadata:
           type: object
           description: >
@@ -1235,7 +1235,7 @@ paths:
           description: >
             **Default value:** `en`<br>
             Set the language of the input source.<br>
-            It can be `en`, `es`, `de`, `fr`, `it`, `nl`, `pt`, `sv` or `ru`. Note that apart from `en` all languages are in beta phase.
+            It can be `en`, `es`, `de`, `fr`, `it`, `nl`, `pt`, `sv`, `da`, `no`, `ar` or `ru`. Note that apart from `en` all languages are in beta phase.
           schema:
             type: string
             default: en
@@ -1246,7 +1246,7 @@ paths:
           description: >
             **Default value:** `en`<br>
             Set the language for the resulting summary.<br>
-            It can be `en`, `es`, `de`, `fr`, `it`, `nl`, `pt`, `sv` or `ru`. Note that apart from `en` all languages are in beta phase.
+            It can be `en`, `es`, `de`, `fr`, `it`, `nl`, `pt`, `sv`, `da`, `no`, `ar` or `ru`. Note that apart from `en` all languages are in beta phase.
           schema:
             type: string
             default: en
@@ -1334,6 +1334,177 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvalidToken'
+
+  /translate:
+    post:
+      -tags:
+        - Translate
+      summary: Translate a transcript
+      description: >
+    description: >
+          Initiate a new translation job with a .txt transcript, JSON transcript, or an existing Wordcab transcript. 
+          The job will be processed asynchronously and the response will contain a `job_name`.
+    parameters:
+      - name: X-Wordcab-Metadata-<Key>
+        in: header
+        required: false
+        description: >
+          A metadata object is composed of a key-value pair. To add metadata to your job, you must add 
+          `X-Wordcab-Metadata-<Key>` headers to your **/summarize** request, where `<Key>` is _a key of your choice_.<br>
+          This way a metadata object with the key-value pairs you initially set will be saved to your job object.
+          By convention, Wordcab will extract anything after `X-Wordcab-Metadata-` (in this case, `<Key>`), 
+          make the string lowercase, and then convert any dashes to underscores.<br>
+          For example, an `X-Wordcab-Metadata-UUID` key with a value of `"abc"`, and an `X-Wordcab-Metadata-User-ID` 
+          key with a value of `"123"` will result in the following metadata object when retrieving your job:
+          ```
+          "metadata": {
+              "uuid": "abc",
+              "user_id": "123"
+          }
+          ```
+        schema:
+          type: string
+        example: X-Wordcab-Metadata-UUID
+      - name: source
+        in: query
+        required: true
+        description: |
+          Declare the source of the data for the Translation job. 
+          _📝 Note that some sources have different parameter requirements._
+          * `generic` - Generic-format .txt and JSON transcripts
+          * `wordcab_transcript` - Summarization job with one Wordcab transcript using a `transcript_id`
+          * `vtt` - A VTT file or string
+          * `rev_ai` - Use the JSON array from Rev.ai's `monologues` object as input
+          * `assembly_ai` - Use the JSON array from AssemblyAI's `utterances` object as input
+          * `deepgram` - Use the JSON array from Deepgram's `utterances` object as input
+          * `vtt` - Either a .vtt file, or raw VTT text in the request body - Learn more about [proper vtt formatting](https://quuz.org/webvtt/). 
+          _Note that speaker labels are required for a VTT source._
+          * `otter` - Learn more about [Otter.ai transcript formatting](https://wordcab.com/blog/summarizing-your-otterai-transcripts-in-wordcab/)
+          * `fireflies` - Learn more about [Fireflies.ai transcript formatting](https://wordcab.com/blog/summarizing-your-firefliesai-transcripts-in-wordcab/)
+          * `sonix` - Learn more about [Sonix.ai transcript formatting](https://wordcab.com/blog/summarizing-your-sonixai-transcripts-in-wordcab/)
+          * `descript` - Learn more about [Descript transcript formatting](https://wordcab.com/blog/how-to-summarize-descript-transcripts-in-wordcab/)
+          * `teams`- Use a .docx transcript from the Microsoft Teams application.
+        schema:
+          type: string
+          default: generic
+          enum: [ generic, wordcab_transcript, vtt, rev_ai, assembly_ai, deepgram, otter, fireflies, sonix, descript, teams ]
+        example: generic
+      - name: display_name
+        in: query
+        required: false
+        description: |
+          A human-readable name for your job. Not strictly required, but highly recommended.
+        schema:
+          type: string
+        example: my_translation_job
+      - name: source_lang
+        in: query
+        required: false
+        description: >
+          **Default value:** `en`<br>
+          Set the language of the input source.<br>
+          It can be `en`, `es`, `de`, `fr`, `it`, `nl`, `pt`, `sv`, `da`, `no`, `ar` or `ru`. Note that apart from `en` all languages are in beta phase.
+        schema:
+          type: string
+          default: en
+        example: en
+      - name: target_lang
+        in: query
+        required: false
+        description: >
+          **Default value:** `en`<br>
+          Set the language for the resulting summary.<br>
+          It can be `en`, `es`, `de`, `fr`, `it`, `nl`, `pt`, `sv`, `da`, `no`, `ar` or `ru`. Note that apart from `en` all languages are in beta phase.
+        schema:
+          type: string
+          default: en
+        example: en
+      - name: transcript_id
+        in: query
+        required: false
+        description: >
+          _Required when `source` is set to `wordcab_transcript`._<br>
+          Represents the id of a processed Wordcab transcript.
+        schema:
+          type: string
+        example: transcript_KU3IU70e4az3WiJhWsOQI7WPXTRweo8W
+      - name: split_long_utterances
+        in: query
+        required: false
+        description: >
+          Splits up overly long speaker utterances. This results in generally more accurate but slightly longer summaries.
+        schema:
+          type: boolean
+          default: true
+        example: true
+      - name: ephemeral_data
+        in: query
+        required: false
+        description: >
+          <span style="color:red;">Warning</span>: requires 
+          <a href="https://wordcab.com/account/webhook-portal/" target="_blank">webhooks to be enabled</a>.
+          If set to `true`, your webhooks will receive all processed data simultaneously instead of only a job reference.
+          Ephemeral data provides a convenient, automatic way of removing sensitive data from Wordcab servers.<br>
+          📝 Note that enabling `ephemeral_data` wipes all sensitive data tied to a particular job.
+          You will not be able to retrieve a finished job via polling, nor will you be able to reuse any 
+          `transcript_id` or `summary_id` tied to the removed job.
+        schema:
+          type: boolean
+          default: false
+        example: false
+      - name: tags
+        in: query
+        required: false
+        description: >
+          A comma-separated string containing tags you'd like to attribute to your job. This is particularly helpful
+          when you want to see translation stats for a particular subset of customers.
+        schema:
+          type: string
+        example: "customer_42,paid_users,vip_users"
+    requestBody:
+      content:
+        multipart/form-data:
+          schema:
+            oneOf:
+              - $ref: "#/components/schemas/TranscriptFile"
+              - $ref: "#/components/schemas/VTTFile"
+              - $ref: "#/components/schemas/jsonBody"
+              - $ref: "#/components/schemas/textBody"
+    responses:
+      '201':
+        description: Successfully created a job
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                job_name:
+                  type: string
+                  description: You can use the newly generated `job_name` to poll the **/jobs** endpoint.
+            example:
+              {
+                "job_name": "transcript_translated_UGWCThBPanz7k6IrTkGbg16PcJLbFee6"
+              }
+      '400':
+        description: Bad request
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/WordcabTranscriptWrongSource"
+                - $ref: "#/components/schemas/WordcabTranscriptNoTranscriptId"
+                - $ref: "#/components/schemas/TranscriptIdError"
+                - $ref: "#/components/schemas/MissingTranscript"
+                - $ref: "#/components/schemas/InvalidJSONTranscriptStructure"
+                - $ref: "#/components/schemas/BlankTranscript"
+                - $ref: "#/components/schemas/ShortTranscript"
+      '401':
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvalidToken'
+
 
   /jobs:
     get:
