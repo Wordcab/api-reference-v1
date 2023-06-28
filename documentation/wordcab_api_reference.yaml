@@ -1339,7 +1339,7 @@ paths:
     post:
       tags:
         - Translate
-      summary: Translate a transcript
+      summary: Start Translation
       description: >
             Initiate a new translation job with a .txt transcript, JSON transcript, or an existing Wordcab transcript. 
             The job will be processed asynchronously and the response will contain a `job_name`.
