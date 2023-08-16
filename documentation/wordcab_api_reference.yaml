@@ -1008,10 +1008,10 @@ paths:
           required: false
           description: >
             A post-processing technique that performs a pass over the transcripts and attempts to correct any misaligned
-            words. Highly recommended.
+            words. Recommended only when initial transcript timestamps are highly inaccurate.
           schema:
             type: boolean
-            default: true
+            default: false
           example: true
         - name: diarization
           in: query
@@ -1045,6 +1045,15 @@ paths:
             type: integer
             default: 10800
           example: 60
+        - name: vocab
+          in: query
+          required: false
+          description: >
+              A comma-separated string of words to be added as a custom dictionary. Useful for adding proper nouns,
+              acronyms, or other words that may not be recognized by the speech-to-text engine.
+          schema:
+              type: string
+          example: "Wordcab,NASA,Aleksandr"
         - name: ephemeral_data
           in: query
           required: false
