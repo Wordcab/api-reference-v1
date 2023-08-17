@@ -1409,7 +1409,7 @@ paths:
           description: >
             **Default value:** `en`<br>
             Set the language of the input source.<br>
-            You can find a [detailed overview of supported languages here](https://docs.wordcab.com/docs/supported-languages-1#supported-summarization-languages).
+            You can find a [detailed overview of supported languages here](https://docs.wordcab.com/docs/supported-languages-1#supported-translation-languages).
           schema:
             type: string
             default: en
@@ -1420,7 +1420,7 @@ paths:
           description: >
             **Default value:** `en`<br>
             Set the language for the resulting summary.<br>
-            You can find a [detailed overview of supported languages here](https://docs.wordcab.com/docs/supported-languages-1#supported-summarization-languages).
+            You can find a [detailed overview of supported languages here](https://docs.wordcab.com/docs/supported-languages-1#supported-translation-languages).
           schema:
             type: string
             default: en
