@@ -539,12 +539,10 @@ components:
           enum: [ generic, audio, wordcab_transcript, signed_url, vtt, rev_ai, assembly_ai, deepgram, otter, fireflies, sonix, descript, teams ]
         source_lang:
           type: string
-          description: The `source_lang` that was set during job creation.
-          enum: [ en, es, fr, de, it, pt, sv, nl, da, no, ar, ru ]
+          description: The `source_lang` that was set during job creation. You can find a [detailed overview of supported languages here](https://docs.wordcab.com/docs/supported-languages-1#supported-summarization-languages).
         target_lang:
           type: string
-          description: The `target_lang` that was set during job creation.
-          enum: [ en, es, fr, de, it, pt, sv, nl, da, no, ar, ru ]
+          description: The `target_lang` that was set during job creation. You can find a [detailed overview of supported languages here](https://docs.wordcab.com/docs/supported-languages-1#supported-summarization-languages).
         metadata:
           type: object
           description: >
@@ -998,7 +996,7 @@ paths:
             **Default behaviour:** Automatically detect language. _Not recommended_.<br>
             Set the language of the input source. This is recommended and results in higher quality transcripts.<br>
             Wordcab supports **57 languages** for transcription, each denoted by a two-letter ISO 639-1 code.
-            Your preferred languages are likely supported.
+            You can find a [detailed overview of supported languages here](https://docs.wordcab.com/docs/supported-languages-1).
           schema:
             type: string
             default: en
@@ -1244,7 +1242,7 @@ paths:
           description: >
             **Default value:** `en`<br>
             Set the language of the input source.<br>
-            It can be `en`, `es`, `de`, `fr`, `it`, `nl`, `pt`, `sv`, `da`, `no`, `ar` or `ru`. Note that apart from `en` all languages are in beta phase.
+            You can find a [detailed overview of supported languages here](https://docs.wordcab.com/docs/supported-languages-1#supported-summarization-languages).
           schema:
             type: string
             default: en
@@ -1255,7 +1253,7 @@ paths:
           description: >
             **Default value:** `en`<br>
             Set the language for the resulting summary.<br>
-            It can be `en`, `es`, `de`, `fr`, `it`, `nl`, `pt`, `sv`, `da`, `no`, `ar` or `ru`. Note that apart from `en` all languages are in beta phase.
+            You can find a [detailed overview of supported languages here](https://docs.wordcab.com/docs/supported-languages-1#supported-summarization-languages).
           schema:
             type: string
             default: en
@@ -1411,7 +1409,7 @@ paths:
           description: >
             **Default value:** `en`<br>
             Set the language of the input source.<br>
-            It can be `en`, `es`, `de`, `fr`, `it`, `nl`, `pt`, `sv`, `da`, `no`, `ar` or `ru`. Note that apart from `en` all languages are in beta phase.
+            You can find a [detailed overview of supported languages here](https://docs.wordcab.com/docs/supported-languages-1#supported-summarization-languages).
           schema:
             type: string
             default: en
@@ -1422,7 +1420,7 @@ paths:
           description: >
             **Default value:** `en`<br>
             Set the language for the resulting summary.<br>
-            It can be `en`, `es`, `de`, `fr`, `it`, `nl`, `pt`, `sv`, `da`, `no`, `ar` or `ru`. Note that apart from `en` all languages are in beta phase.
+            You can find a [detailed overview of supported languages here](https://docs.wordcab.com/docs/supported-languages-1#supported-summarization-languages).
           schema:
             type: string
             default: en
