@@ -525,8 +525,6 @@ components:
             asr_engine:
               type: string
               enum: [ asr_wordcab ]
-            alignment:
-              type: boolean
             diarization:
               type: boolean
             dual_channel:
@@ -578,7 +576,6 @@ components:
           "target_lang": "en",
           "transcript_details": {
             "asr_engine": "asr_wordcab",
-            "alignment": true,
             "diarization": true,
             "dual_channel": false,
             "word_timestamps": true
@@ -1001,16 +998,6 @@ paths:
             type: string
             default: en
           example: en
-        - name: alignment
-          in: query
-          required: false
-          description: >
-            A post-processing technique that performs a pass over the transcripts and attempts to correct any misaligned
-            words. Recommended only when initial transcript timestamps are highly inaccurate.
-          schema:
-            type: boolean
-            default: false
-          example: true
         - name: diarization
           in: query
           required: false
