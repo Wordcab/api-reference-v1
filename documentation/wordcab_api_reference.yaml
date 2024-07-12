@@ -916,7 +916,7 @@ paths:
                   job_name:
                     type: string
                     description: You can use the newly generated `job_name` to poll the **/jobs** endpoint, and a `transcript_id` to fetch the transcript object.
-                  classification_id:
+                  transcript_id:
                     type: string
                     description: The `transcript_id` allows you to directly poll for status and retrieve results using the **/transcripts** endpoint.
               example:
@@ -2217,6 +2217,118 @@ paths:
                 oneOf:
                   - $ref: '#/components/schemas/SummaryIdNotFound'
                   - $ref: '#/components/schemas/SummaryNotFound'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidToken'
+
+  /classifications:
+    get:
+      tags:
+        - Classifications
+      summary: List Classifications
+      description: Retrieve a list of classifications.
+      parameters:
+        - name: page_size
+          in: query
+          required: false
+          description: >
+            **Default value:** `100`<br>
+            The number of summaries you'd like to see per response. If there are more summaries than `page_size`, 
+            you'll be provided a link to navigate to the next `page`.
+          schema:
+            type: integer
+            default: 100
+          example: 100
+      responses:
+        '200':
+          description: Successfully retrieved a list of classifications
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page_size:
+                    type: integer
+                    description: The number of `pages` returned.
+                  next:
+                    type: string
+                    description: The request URL for the previous page of results.
+                  previous:
+                    type: string
+                    description: The request URL for the next page of results.
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        job_status:
+                          type: string
+                          description: |
+                            The `status` of the associated job.
+                            * `Pending` - The job object has been created and is about to be queued
+                            * `ItemQueued` - The job has been queued
+                            * `Classifying` - The classification is being processed
+                            * `PreparingClassification` - The classification is being finalized
+                            * `ClassificationComplete` - The classification is ready
+                            * `Deleted` - The job and its associated classification has been deleted
+                            * `Error` - The job encountered an error
+                          enum: [ Pending, ItemQueued, Classifying, PreparingClassification, ClassificationComplete, Deleted,
+                                  Error ]
+                        job_name:
+                          type: string
+                          description: The `job_name` of the associated job.
+                        classification_id:
+                          type: string
+                          description: The id of the classification object.
+                        time_started:
+                          type: string
+                          description: The ISO 8601 timestamp for when the associated job was initiated.
+                        time_completed:
+                          type: string
+                          description: The ISO 8601 timestamp for when the associated job was completed.
+              example:
+                {
+                  "page_count": 10,
+                  "next": "https://wordcab.com/api/v1/classifications/?page=2",
+                  "results": [
+                    {
+                      "job_status": "ClassificationComplete",
+                      "job_name": "job_hDGRNL9yOf5RfpURCNLNJqhFrnBAtDc3",
+                      "classification_id": "classification_UGWCThBPanz7k6IrTkGbg16PcJLbFee6",
+                      "time_started": "2023-01-01T12:13:14.156789Z",
+                      "time_completed": "2023-01-01T12:15:18.156789Z"
+                    }
+                  ]
+                }
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidToken'
+
+  /classifications/{classification_id}:
+    get:
+      tags:
+        - Classifications
+      summary: Retrieve Classifications
+      description: Retrieve a Classifications using the `classification_id` generated during job creation.
+      parameters:
+        - name: classification_id
+          in: path
+          required: true
+          description: The `classification_id` of the classification you'd like to retrieve.
+          schema:
+            type: string
+          example: classification_UGWCThBPanz7k6IrTkGbg16PcJLbFee6
+      responses:
+        '200':
+          description: Successfully retrieved a classification object
+        '400':
+          description: Bad request
         '401':
           description: Unauthorized
           content:
