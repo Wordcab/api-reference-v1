@@ -916,6 +916,9 @@ paths:
                   job_name:
                     type: string
                     description: You can use the newly generated `job_name` to poll the **/jobs** endpoint, and a `transcript_id` to fetch the transcript object.
+                  classification_id:
+                    type: string
+                    description: The `transcript_id` allows you to directly poll for status and retrieve results using the **/transcripts** endpoint.
               example:
                 {
                   "job_name": "narrative_summary_UGWCThBPanz7k6IrTkGbg16PcJLbFee6",
@@ -1400,7 +1403,6 @@ paths:
             Add these as a comma-separated string. For example: `classify_audio,sentiment_analysis,clarity_scores`.
           schema:
             type: string
-            enum: [ classify_audio, sentiment_analysis, clarity_scores ]
           example: "classify_audio,sentiment_analysis,clarity_scores"
       requestBody:
         content:
@@ -1418,7 +1420,10 @@ paths:
                 properties:
                   job_name:
                     type: string
-                    description: You can use the newly generated `job_name` to poll the **/jobs** endpoint, and a `transcript_id` to fetch the transcript object.
+                    description: You can use the newly generated `job_name` to poll the **/jobs** endpoint, and a `classification_id` to fetch the transcript object.
+                  classification_id:
+                    type: string
+                    description: The `classification_id` allows you to directly poll for status and retrieve results using the **/classifications** endpoint.
               example:
                 {
                   "job_name": "job_UGWCThBPanz7k6IrTkGbg16PcJLbFee6",
