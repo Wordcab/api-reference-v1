@@ -763,170 +763,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvalidToken'
-  /extract:
-    post:
-      tags:
-        - Extract
-      summary: Start Extract
-      description: >
-        Initiate a new extract job with an audio file, text transcript, or JSON object.
-        The job will be processed asynchronously and the response will contain a `job_name`.
-      parameters:
-        - name: X-Wordcab-Metadata-<Key>
-          in: header
-          required: false
-          description: >
-            A metadata object is composed of a key-value pair. To add metadata to your job, you must add 
-            `X-Wordcab-Metadata-<Key>` headers to your **/extract** request, where `<Key>` is _a key of your choice_.<br>
-            This way a metadata object with the key-value pairs you initially set will be saved to your job object.
-            By convention, Wordcab will extract anything after `X-Wordcab-Metadata-` (in this case, `<Key>`), 
-            make the string lowercase, and then convert any dashes to underscores.<br>
-            For example, an `X-Wordcab-Metadata-UUID` key with a value of `"abc"`, and an `X-Wordcab-Metadata-User-ID` 
-            key with a value of `"123"` will result in the following metadata object when retrieving your job:
-            ```
-            "metadata": {
-                "uuid": "abc",
-                "user_id": "123"
-            }
-            ```
-          schema:
-            type: string
-          example: X-Wordcab-Metadata-UUID
-        - name: source
-          in: query
-          required: true
-          description: |
-            Declare the source of the data for the Summarization job. 
-            _📝 Note that some sources have different parameter requirements._
-            * `generic` - Generic-format .txt and JSON transcripts
-            * `audio` - For uploaded audio files
-            * `wordcab_transcript` - Summarization job with one Wordcab transcript using a `transcript_id`
-            * `signed_url` - _AWS_, _GCP_ or _Azure_ signed URL
-            * `vtt` - A VTT file or string
-            * `rev_ai` - Use the JSON array from Rev.ai's `monologues` object as input
-            * `assembly_ai` - Use the JSON array from AssemblyAI's `utterances` object as input
-            * `deepgram` - Use the JSON array from Deepgram's `utterances` object as input
-            * `vtt` - Either a .vtt file, or raw VTT text in the request body - Learn more about [proper vtt formatting](https://quuz.org/webvtt/). 
-            _Note that speaker labels are required for a VTT source._
-            * `otter` - Learn more about [Otter.ai transcript formatting](https://wordcab.com/blog/summarizing-your-otterai-transcripts-in-wordcab/)
-            * `fireflies` - Learn more about [Fireflies.ai transcript formatting](https://wordcab.com/blog/summarizing-your-firefliesai-transcripts-in-wordcab/)
-            * `sonix` - Learn more about [Sonix.ai transcript formatting](https://wordcab.com/blog/summarizing-your-sonixai-transcripts-in-wordcab/)
-            * `descript` - Learn more about [Descript transcript formatting](https://wordcab.com/blog/how-to-summarize-descript-transcripts-in-wordcab/)
-            * `teams`- Use a .docx transcript from the Microsoft Teams application.
-          schema:
-            type: string
-            default: generic
-            enum: [ generic, audio, wordcab_transcript, signed_url, vtt, rev_ai, assembly_ai, deepgram, otter, fireflies, sonix, descript, teams ]
-          example: generic
-        - name: display_name
-          in: query
-          required: false
-          description: |
-            A human-readable name for your job. Not strictly required, but highly recommended.
-          schema:
-            type: string
-          example: my_extract_job
-        - name: pipeline
-          in: query
-          required: false
-          description: >
-            **Default value:** `questions_answers,topic_segments,emotions,speaker_talk_ratios`<br>
-            A comma-separated list of actions to take upon initiating the job. You can specify any combination of the following:<br>
-            * `questions_answers` - Detect question-answer pairs throughout the transcript.<br>
-            * `topic_segments` - Extract topic segments from the transcript<br>
-            * `emotions` - Extract emotions from the transcript<br>
-            * `speaker_talk_ratios` - Details of the amount of time each speaker spoke
-          schema:
-            type: string
-            default: questions_answers,topic_segments,emotions,speaker_talk_ratios
-          example: questions_answers,topic_segments,emotions,speaker_talk_ratios
-        - name: tags
-          in: query
-          required: false
-          description: >
-            A comma-separated string containing tags you'd like to attribute to your job. This is particularly helpful
-            when you want to filter your jobs by a specific tag.
-          schema:
-            type: string
-          example: "customer_42,paid_users,vip_users"
-        - name: transcript_id
-          in: query
-          required: false
-          description: >
-            _Required when `source` is set to `wordcab_transcript`._<br>
-            Represents the id of a processed Wordcab transcript.
-          schema:
-            type: string
-          example: transcript_KU3IU70e4az3WiJhWsOQI7WPXTRweo8W
-        - name: signed_url
-          in: query
-          required: false
-          description: >
-            _Required when `source` is set to `signed_url`._<br>
-            An _AWS_, _GCP_ or _Azure_ signed URL that points to an audio file.
-          schema:
-            type: string
-          example: "https://s3.us-east-2.amazonaws.com/example-bucket/sales-call.mp3?X-Amz-Security-Token=XYZ…"
-        - name: ephemeral_data
-          in: query
-          required: false
-          description: >
-            <span style="color:red;">Warning</span>: requires 
-            <a href="https://wordcab.com/account/webhook-portal/" target="_blank">webhooks to be enabled</a>.
-            If set to `true`, your webhooks will receive all processed data simultaneously instead of only a job reference.
-            Ephemeral data provides a convenient, automatic way of removing sensitive data from Wordcab servers.<br>
-            📝 Note that enabling `ephemeral_data` wipes all sensitive data tied to a particular job.
-            You will not be able to retrieve a finished job via polling, nor will you be able to reuse any 
-            `transcript_id` or `summary_id` tied to the removed job.
-          schema:
-            type: boolean
-            default: false
-          example: false
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              oneOf:
-                - $ref: "#/components/schemas/TranscriptFile"
-                - $ref: "#/components/schemas/AudioFile"
-                - $ref: "#/components/schemas/VTTFile"
-                - $ref: "#/components/schemas/jsonBody"
-      responses:
-        '201':
-          description: Successfully created a job
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  job_name:
-                    type: string
-                    description: You can use the newly generated `job_name` to poll the **/jobs** endpoint.
-              example:
-                {
-                  "job_name": "job_UGWCThBPanz7k6IrTkGbg16PcJLbFee6"
-                }
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                oneOf:
-                  - $ref: "#/components/schemas/WordcabTranscriptWrongSource"
-                  - $ref: "#/components/schemas/WordcabTranscriptNoTranscriptId"
-                  - $ref: "#/components/schemas/TranscriptIdError"
-                  - $ref: "#/components/schemas/InvalidSummaryType"
-                  - $ref: "#/components/schemas/InvalidSummaryLengths"
-                  - $ref: "#/components/schemas/MissingTranscript"
-                  - $ref: "#/components/schemas/InvalidJSONTranscriptStructure"
-                  - $ref: "#/components/schemas/BlankTranscript"
-                  - $ref: "#/components/schemas/ShortTranscript"
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InvalidToken'
 
   /transcribe:
     post:
@@ -934,15 +770,15 @@ paths:
         - Transcribe
       summary: Start Transcription
       description: >
-          Initiate a new transcription job with an audio file, signed URL, YouTube URL, or m3u8 URL. 
-          The job will be processed asynchronously and the response will contain a `job_name`.
+          Initiate a new transcription job with an audio file, presigned URL, YouTube URL, or m3u8 URL. 
+          The job will be processed asynchronously and the response will contain a `job_name` and `transcript_id`.
       parameters:
         - name: X-Wordcab-Metadata-<Key>
           in: header
           required: false
           description: >
             A metadata object is composed of a key-value pair. To add metadata to your job, you must add 
-            `X-Wordcab-Metadata-<Key>` headers to your **/summarize** request, where `<Key>` is _a key of your choice_.<br>
+            `X-Wordcab-Metadata-<Key>` headers to your **/transcribe** request, where `<Key>` is _a key of your choice_.<br>
             This way a metadata object with the key-value pairs you initially set will be saved to your job object.
             By convention, Wordcab will extract anything after `X-Wordcab-Metadata-` (in this case, `<Key>`), 
             make the string lowercase, and then convert any dashes to underscores.<br>
@@ -969,9 +805,9 @@ paths:
           in: query
           required: false
           description: >
-            If you're not uploading an audio file, you can send either a signed URL, YouTube URL or m3u8 URL.
+            If you're not uploading an audio file, you can send either a presigned URL, YouTube URL or m3u8 URL.
             In this case, this parameter is **required**. Specify a `url_type` from one of the following:
-            `audio_url`, `youtube`, `m3u8`, and include the actual URL in the `url` parameter.
+            `audio_url`, `youtube`, `m3u8`, and include an encoded URL in the `url` parameter.
           schema:
             type: string
             enum: [ audio_url, youtube, m3u8 ]
@@ -980,8 +816,8 @@ paths:
           in: query
           required: false
           description: >
-            If you're not uploading an audio file, you can send either a signed URL, YouTube URL or m3u8 URL.
-            In this case, this parameter is **required**. Specify a `url_type` and include the actual `url`
+            If you're not uploading an audio file, you can send either a presigned URL, YouTube URL or m3u8 URL.
+            In this case, this parameter is **required**. Specify a `url_type` and include an encoded URL
             for this parameter.
           schema:
             type: string
@@ -1130,7 +966,7 @@ paths:
             * `generic` - Generic-format .txt and JSON transcripts
             * `audio` - For uploaded audio files
             * `wordcab_transcript` - Summarization job with one Wordcab transcript using a `transcript_id`
-            * `signed_url` - _AWS_, _GCP_ or _Azure_ signed URL
+            * `signed_url` - _AWS_, _GCP_ or _Azure_ presigned URL
             * `vtt` - A VTT file or string
             * `rev_ai` - Use the JSON array from Rev.ai's `monologues` object as input
             * `assembly_ai` - Use the JSON array from AssemblyAI's `utterances` object as input
@@ -1210,7 +1046,7 @@ paths:
           required: false
           description: >
             _Required when `source` is set to `signed_url`._<br>
-            An _AWS_, _GCP_ or _Azure_ signed URL that points to an audio file.
+            An _AWS_, _GCP_ or _Azure_ presigned URL that points to an audio file.
           schema:
             type: string
           example: "https://s3.us-east-2.amazonaws.com/example-bucket/sales-call.mp3?X-Amz-Security-Token=XYZ…"
@@ -1498,6 +1334,102 @@ paths:
               schema:
                 $ref: '#/components/schemas/InvalidToken'
 
+  /classify:
+    post:
+      tags:
+        - Classify
+      summary: Start Classification
+      description: >
+        Initiate a new classification job with an audio file, presigned URL, YouTube URL, or m3u8 URL. 
+        The job will be processed asynchronously and the response will contain a `job_name` and `classification_id`.
+      parameters:
+        - name: X-Wordcab-Metadata-<Key>
+          in: header
+          required: false
+          description: >
+            A metadata object is composed of a key-value pair. To add metadata to your job, you must add 
+            `X-Wordcab-Metadata-<Key>` headers to your **/classify** request, where `<Key>` is _a key of your choice_.<br>
+            This way a metadata object with the key-value pairs you initially set will be saved to your job object.
+            By convention, Wordcab will extract anything after `X-Wordcab-Metadata-` (in this case, `<Key>`), 
+            make the string lowercase, and then convert any dashes to underscores.<br>
+            For example, an `X-Wordcab-Metadata-UUID` key with a value of `"abc"`, and an `X-Wordcab-Metadata-User-ID` 
+            key with a value of `"123"` will result in the following metadata object when retrieving your job:
+            ```
+            "metadata": {
+                "uuid": "abc",
+                "user_id": "123"
+            }
+            ```
+          schema:
+            type: string
+          example: X-Wordcab-Metadata-UUID
+        - name: display_name
+          in: query
+          required: false
+          description: |
+            A human-readable name for your job. Not strictly required, but highly recommended.
+          schema:
+            type: string
+          example: my_transcription_job
+        - name: url_type
+          in: query
+          required: false
+          description: >
+            If you're not uploading an audio file, you can send either a presigned URL, YouTube URL or m3u8 URL.
+            In this case, this parameter is **required**. Specify a `url_type` from one of the following:
+            `audio_url`, `youtube`, `m3u8`, and include an encoded URL in the `url` parameter.
+          schema:
+            type: string
+            enum: [ audio_url, youtube, m3u8 ]
+          example: "youtube"
+        - name: url
+          in: query
+          required: false
+          description: >
+            If you're not uploading an audio file, you can send either a presigned URL, YouTube URL or m3u8 URL.
+            In this case, this parameter is **required**. Specify a `url_type` and include an encoded URL
+            for this parameter.
+          schema:
+            type: string
+          example: "https://your-presigned-audio-url.com/"
+        - name: tasks
+          in: query
+          required: false
+          description: >
+            Can be one or more of the following: `classify_audio`, `sentiment_analysis` and/or `clarity_scores`.
+            Add these as a comma-separated string. For example: `classify_audio,sentiment_analysis,clarity_scores`.
+          schema:
+            type: string
+            enum: [ classify_audio, sentiment_analysis, clarity_scores ]
+          example: "classify_audio,sentiment_analysis,clarity_scores"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/TranscribeAudioFile"
+      responses:
+        '201':
+          description: Successfully created a job
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  job_name:
+                    type: string
+                    description: You can use the newly generated `job_name` to poll the **/jobs** endpoint, and a `transcript_id` to fetch the transcript object.
+              example:
+                {
+                  "job_name": "job_UGWCThBPanz7k6IrTkGbg16PcJLbFee6",
+                  "classification_id": "classification_KU3IU70e4az3WiJhWsOQI7WPXTRweo8W"
+                }
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidToken'
 
   /jobs:
     get:
